@@ -3,17 +3,16 @@ A simple Powershell Reverse Backdoor
 
 # Features / To Do
 ## Features 
-* Download Files from remote system
 * Fetch target computers public IP address
 * List local users
-*  Get OS Information
-* Get BIOS Information
-*  Get Active TCP Clients
-## To Do 
 * Find Intresting Files
-* Find Writeable Directories
-* Get Startup Apps
+* Get OS Information
+* Get BIOS Information
 * Get Anti-Virus Status
+* Get Active TCP Clients
+## To Do 
+* Download Files from remote system
+* Find Writeable Directories
 * Get Windows Update Status
 
 # Setup
