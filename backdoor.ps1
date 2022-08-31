@@ -10,12 +10,33 @@ v0.0.0
 [+] BIOS Information
 [+] Active TCP Clients
 [+] Find Intresting Files
+[+] Checks to see if common tools are installed
 
 [-] Download Files from remote system
 [-] Find Writeable Directories
 
 #>
 
+function get_tools() {
+    $tools = @("nmap -h", "nc -v", "wireshark -v", "python3 -V", 
+    "python -V", "perl -V", "ruby -h", "hashcat -h", "john -h", 
+    "airmon-ng -h", "wifite -h", "sqlmap -h", "ssh")
+    if ($help -eq "--help") {
+        return "Checks to see what tools are installed on the system"
+    }
+    $lines = ""
+    foreach ($tool in $tools) {
+        try {
+            iex $tool | Out-null
+            $tool = $tool.Split(" ")[0]
+            $lines += "[+] $tool is installed`n"
+        } catch {
+
+        }
+    }
+    return $lines
+
+}
 
 function get_loot($help, $directory) {
     if ($help -eq "--help") {
