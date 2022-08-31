@@ -10,6 +10,7 @@ A simple Powershell Reverse Backdoor
 * Get BIOS Information
 * Get Anti-Virus Status
 * Get Active TCP Clients
+* Checks for common pentesting software installed
 ## To Do 
 * Download Files from remote system
 * Find Writeable Directories
