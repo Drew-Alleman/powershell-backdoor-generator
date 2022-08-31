@@ -9,10 +9,10 @@ v0.0.0
 [+] OS Information
 [+] BIOS Information
 [+] Active TCP Clients
+[+] Download Files from remote system
 [+] Find Intresting Files
 [+] Checks to see if common tools are installed
 
-[-] Download Files from remote system
 [-] Find Writeable Directories
 
 #>
