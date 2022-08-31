@@ -18,16 +18,17 @@ v0.0.0
 #>
 
 function get_tools() {
-    $tools = @("nmap -h", "nc -v", "wireshark -v", "python3 -V", 
+    $tools = @("nmap -h", "nc -h", "wireshark -v", "python3 -V", 
     "python -V", "perl -V", "ruby -h", "hashcat -h", "john -h", 
-    "airmon-ng -h", "wifite -h", "sqlmap -h", "ssh")
+    "airmon-ng -h", "wifite -h", "sqlmap -h", "ssh", "gdb -h", 
+    "radare2 -h", "dig -h", "whois -h", "gcc")
     if ($help -eq "--help") {
         return "Checks to see what tools are installed on the system"
     }
     $lines = ""
     foreach ($tool in $tools) {
         try {
-            iex $tool | Out-null
+            iex $tool | Out-Null
             $tool = $tool.Split(" ")[0]
             $lines += "[+] $tool is installed`n"
         } catch {
