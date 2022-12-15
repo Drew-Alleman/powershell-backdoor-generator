@@ -1,7 +1,7 @@
 # powershell-backdoor
 A Powershell Reverse Backdoor
 <br>
-![preview](preview.png)
+![preview](preview.PNG)
 <br>
 # Features / To Do
 ## Features 
