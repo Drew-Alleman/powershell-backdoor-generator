@@ -1,4 +1,15 @@
 # powershell-backdoor
+Reverse Backdoor written in Powershell and obfuscated with python. Allowing the backdoor to have a new signature after every run.
+
+## Output of 5 obfuscations/Runs 
+```
+sha1:c7a5fa3e56640ce48dcc3e8d972e444d9cdd2306
+sha1:b32dab7b26cdf6b9548baea6f3cfe5b8f326ceda
+sha1:e49ab36a7ad6b9fc195b4130164a508432f347db
+sha1:ba40fa061a93cf2ac5b6f2480f6aab4979bd211b
+sha1:f2e43320403fb11573178915b7e1f258e7c1b3f0
+```
+# Preview
 ![preview](preview.PNG)
 <br>
 # Features / To Do
