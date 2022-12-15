@@ -3,6 +3,7 @@ A simple Powershell Reverse Backdoor
 
 # Features / To Do
 ## Features 
+* Download Files from remote system
 * Fetch target computers public IP address
 * List local users
 * Find Intresting Files
@@ -12,7 +13,6 @@ A simple Powershell Reverse Backdoor
 * Get Active TCP Clients
 * Checks for common pentesting software installed
 ## To Do 
-* Download Files from remote system
 * Find Writeable Directories
 * Get Windows Update Status
 
