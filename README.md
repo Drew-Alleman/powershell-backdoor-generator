@@ -39,7 +39,7 @@ PS C:\Users\DrewQ\Desktop> python .\listen.py --verbose
 No arguments are required, backdoor.ps1 will be dropped in the current working directory.
 
 # Execution
-Tested on Windows 11 and Kali Linux
+Tested on Windows 11, Windows 10 and Kali Linux
 ```cmd
 powershell.exe -File backdoor.ps1 -ExecutionPolicy Unrestricted
 ```
