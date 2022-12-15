@@ -24,6 +24,7 @@ sha1:f2e43320403fb11573178915b7e1f258e7c1b3f0
 * Get Active TCP Clients
 * Checks for common pentesting software installed
 ## To Do 
+* Add Standard Backdoor
 * Find Writeable Directories
 * Get Windows Update Status
 
