@@ -1,5 +1,5 @@
 # powershell-backdoor
-A simple Powershell Reverse Backdoor
+A Powershell Reverse Backdoor
 
 # Features / To Do
 ## Features 
