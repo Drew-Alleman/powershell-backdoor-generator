@@ -4,7 +4,7 @@ Reverse Backdoor written in Powershell and obfuscated with python. Allowing the 
 # Preview
 ![preview](preview.PNG)
 <br>
-# Features / To Do
+# Features
 ## Features 
 * Download Files from remote system
 * Fetch target computers public IP address
