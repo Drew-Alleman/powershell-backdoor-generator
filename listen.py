@@ -6,7 +6,7 @@ import string
 import random
 
 BLOCKSIZE = 65536
-READ_AMOUNT = 4096
+READ_AMOUNT = 50*1024
 
 # This is used for generating a new name for each 
 # variable and function in the powershell script. 
