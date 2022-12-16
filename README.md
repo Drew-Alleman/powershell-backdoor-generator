@@ -1,11 +1,10 @@
 # powershell-backdoor
 Reverse Backdoor written in Powershell and obfuscated with python. Allowing the backdoor to have a new signature after every run.
 
-# Preview
+## Preview
 ![preview](preview.PNG)
 <br>
-# Features
-## Features 
+## Features
 * Download Files from remote system
 * Fetch target computers public IP address
 * List local users
@@ -16,7 +15,7 @@ Reverse Backdoor written in Powershell and obfuscated with python. Allowing the 
 * Get Active TCP Clients
 * Checks for common pentesting software installed
 
-# Setup
+## Setup
 Don't change the code inside template.ps1, instead run listen.py
 ```
 PS C:\Users\DrewQ\Desktop> python .\listen.py --verbose
@@ -26,7 +25,7 @@ PS C:\Users\DrewQ\Desktop> python .\listen.py --verbose
 ```
 No arguments are required, backdoor.ps1 will be dropped in the current working directory.
 
-# Backdoor Execution
+## Backdoor Execution
 Tested on Windows 11, Windows 10 and Kali Linux
 ```cmd
 powershell.exe -File backdoor.ps1 -ExecutionPolicy Unrestricted
