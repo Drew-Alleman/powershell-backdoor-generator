@@ -39,7 +39,7 @@ powershell.exe -File backdoor.ps1 -ExecutionPolicy Unrestricted
 * Add Standard Backdoor
 * Find Writeable Directories
 * Get Windows Update Status
-
+* USB Rubber Ducky Support
 
 ## Output of 5 obfuscations/Runs 
 ```
