@@ -26,9 +26,9 @@ options:
 # Quick Links
 * [Preview](#preview)
 * [Features](#features)
-* [Standard Backdoor](standard-backdoor)
-* [Flipper Zero Backdoor](flipper-zero-backdoor)
-* [USB Rubber Ducky Backdoor](usb-rubber-ducky-backdoor)
+* [Standard Backdoor](#standard-backdoor)
+* [Flipper Zero Backdoor](#flipper-zero-backdoor)
+* [USB Rubber Ducky Backdoor](#usb-rubber-ducky-backdoor)
 * [Thanks](#thanks)
 * [To Do](#to-do)
 
