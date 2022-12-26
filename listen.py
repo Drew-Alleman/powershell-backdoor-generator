@@ -91,7 +91,7 @@ class Backdoor:
         thread = Thread(target=self.__just_one_please)
         thread.daemon = True
         thread.start()
-        print(f"[*] Started HTTP server hosting directory http://{self.config.ip_address}:{self.config.port}/ ")
+        print(f"[*] Started HTTP server hosting directory http://{self.config.ip_address}:{self.config.server_port}/ ")
 
     def start_session(self):
         """ Creates the listener
@@ -204,6 +204,9 @@ def main(args) -> None:
     """
     try:
         config = Config(CWD, **vars(args))
+        if config.list_payloads:
+            show_help()
+            exit()
         l = Backdoor(config)
         l.start()
     except KeyboardInterrupt:
@@ -273,7 +276,7 @@ if __name__ ==  "__main__":
         help=f"USB Rubber Ducky/Flipper Zero backdoor payload to execute", 
     )
     parser.add_argument(
-        "--list--payloads",
+        "--list-payloads",
         help=f"List all available payloads", 
         default=False,
         action="store_true"
