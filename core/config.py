@@ -26,5 +26,5 @@ class Config:
         self.BASIC_PAYLOAD = self.TEMPLATE_DIR + "basic-payload.txt"
         self.ADVANCED_PAYLOAD = self.TEMPLATE_DIR + "advanced-payload.txt"
         self.verbose = kwargs.get("verbose")
-        self.just_listen = kwargs.get("just_listen")
-        self.just_listen_and_host = kwargs.get("just_listen_and_host")
+        self.just_listen = kwargs.get("actually_listen")
+        self.just_listen_and_host = kwargs.get("listen_and_host")

@@ -1,4 +1,5 @@
 import re
+import time
 import socket
 import random
 import string
@@ -42,8 +43,10 @@ def get_output(command: list) -> str:
     :param command: commad to run
     :return: stdout 
     """
-    proc = subprocess.run(command, stdout=subprocess.PIPE,  stderr=subprocess.PIPE)
-    return proc.stdout
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE,  stderr=subprocess.PIPE)
+    time.sleep(1.5)
+    stdout, stderr = proc.communicate()
+    return stdout
 
 def obfuscate(original: str, old: str, size: int = None) -> str:
     """ Obfuscate's a specific variable from text to a random string

