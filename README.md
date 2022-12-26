@@ -1,27 +1,31 @@
 # powershell-backdoor
 Reverse Backdoor written in Powershell and obfuscated with python. Allowing the backdoor to have a new signature after every run.
 ```
-usage: listen.py [-h] [--ip-address IP_ADDRESS] [--port PORT] [--random] [--out OUT] [--verbose] [--delay DELAY]
-                 [--flipper FLIPPER] [--ducky] [--server-port SERVER_PORT] [-k KEYBOARD]
+usage: listen.py [-h] [--ip-address IP_ADDRESS] [--port PORT] [--random] [--out OUT] [--verbose] [--delay DELAY] [--flipper FLIPPER] [--ducky]
+                 [--server-port SERVER_PORT] [--payload PAYLOAD] [--list--payloads] [-k KEYBOARD] [-L] [-H]
 
 Powershell Backdoor Generator
 
 options:
   -h, --help            show this help message and exit
   --ip-address IP_ADDRESS, -i IP_ADDRESS
-                        IP Address to bind the backdoor too (default: 192.168.0.223)
+                        IP Address to bind the backdoor too (default: 192.168.0.76)
   --port PORT, -p PORT  Port for the backdoor to connect over (default: 4444)
   --random, -r          Randomizes the outputed backdoor's file name
   --out OUT, -o OUT     Specify the backdoor filename (relative file names)
   --verbose, -v         Show verbose output
   --delay DELAY         Delay in milliseconds before Flipper Zero/Ducky-Script payload execution (default:100)
-  --flipper FLIPPER     Payload file for flipper zero to connect to the http server (includes EOL conversion)
-                        (relative file name)
+  --flipper FLIPPER     Payload file for flipper zero to connect to the http server (includes EOL conversion) (relative file name)
   --ducky               Creates an inject.bin for the http server
   --server-port SERVER_PORT
-                        Port to run the HTTP server on (--server) (default: 8989)
+                        Port to run the HTTP server on (--server) (default: 8080)
+  --payload PAYLOAD     USB Rubber Ducky/Flipper Zero backdoor payload to execute
+  --list--payloads      List all available payloads
   -k KEYBOARD, --keyboard KEYBOARD
                         Keyboard layout for Bad Usb/Flipper Zero (default: us)
+  -L, --just-listen     Just listen for any backdoor connections
+  -H, --just-listen-and-host
+                        Just listen for any backdoor connections and host the backdoor directory
 ```
 # Quick Links
 * [Preview](#preview)
