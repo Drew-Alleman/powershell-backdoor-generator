@@ -15,7 +15,7 @@ options:
   --out OUT, -o OUT     Specify the backdoor filename (relative file names)
   --verbose, -v         Show verbose output
   --delay DELAY         Delay in milliseconds before Flipper Zero/Ducky-Script payload execution (default:100)
-  --flipper FLIPPER     Payload file for flipper zero to connect to the http server (includes EOL conversion) (relative file name)
+  --flipper FLIPPER     Payload file for flipper zero (includes EOL conversion) (relative file name)
   --ducky               Creates an inject.bin for the http server
   --server-port SERVER_PORT
                         Port to run the HTTP server on (--server) (default: 8080)
