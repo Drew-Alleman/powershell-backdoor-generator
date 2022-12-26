@@ -12,10 +12,10 @@ BLOCKSIZE = 65536
 WINDOWS_LINE_ENDING = b'\r\n'
 UNIX_LINE_ENDING = b'\n'
 
-def make_unix_here(file_path, new_path):
-    with open(file_path, 'rb') as open_file:
-        content = open_file.read()
-        content.replace(WINDOWS_LINE_ENDING, UNIX_LINE_ENDING)
+def make_unix_here(content, new_path):
+    """ Makes file content unix EOL 
+    """
+    content.replace(WINDOWS_LINE_ENDING, UNIX_LINE_ENDING)
     with open(new_path, 'wb') as f:
         f.write(content)
     return True
@@ -24,6 +24,18 @@ def make_unix_here(file_path, new_path):
 format_string = lambda string: string.decode().strip("\n") if type(string) == bytes else string.strip()
 
 generate_string = lambda string_size: ''.join(random.choice(string.ascii_letters) for i in range(string_size))
+
+def save_content_to_file(content: str, filename: str):
+    """ Saves content to a local file
+    :param content: Bytes to save to file 
+    :param filename: Filename to save data to
+    """
+    if "Cannot find path '" in format_string(content):
+        return False
+    with open(filename, "w") as f:
+        f.seek(0)
+        f.write(content)
+    return True
 
 def get_output(command: list) -> str:
     """ returns the stdout of a cmd command
@@ -61,12 +73,9 @@ def get_file_content(filename: str) -> str:
     :param filename: Filename to read
     :return: File content as a string
     """
-    try:
-        with open(filename, "r") as f:
-            content: str = f.read()
-        return content
-    except  EnvironmentError:
-        return None
+    with open(filename, "r") as f:
+        content: str = f.read()
+    return content
 
 def get_ip_address():
     """ Fetches the users active local IP Address
