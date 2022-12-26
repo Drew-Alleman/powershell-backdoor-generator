@@ -1,5 +1,5 @@
 # powershell-backdoor
-Reverse Backdoor written in Powershell and obfuscated with python. Allowing the backdoor to have a new signature after every run.
+Reverse backdoor written in Powershell and obfuscated with Python. Allowing the backdoor to have a new signature after every run. Also can generate auto run scripts for Flipper Zero and USB Rubber Ducky.
 ```
 usage: listen.py [-h] [--ip-address IP_ADDRESS] [--port PORT] [--random] [--out OUT] [--verbose] [--delay DELAY] [--flipper FLIPPER] [--ducky]
                  [--server-port SERVER_PORT] [--payload PAYLOAD] [--list--payloads] [-k KEYBOARD] [-L] [-H]
