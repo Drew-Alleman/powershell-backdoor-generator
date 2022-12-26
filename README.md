@@ -23,8 +23,9 @@ options:
   --list--payloads      List all available payloads
   -k KEYBOARD, --keyboard KEYBOARD
                         Keyboard layout for Bad Usb/Flipper Zero (default: us)
-  -L, --just-listen     Just listen for any backdoor connections
-  -H, --just-listen-and-host
+  -A, --actually-listen
+                        Just listen for any backdoor connections
+  -H, --listen-and-host
                         Just listen for any backdoor connections and host the backdoor directory
 ```
 # Quick Links
