@@ -9,7 +9,7 @@ Powershell Backdoor Generator
 options:
   -h, --help            show this help message and exit
   --ip-address IP_ADDRESS, -i IP_ADDRESS
-                        IP Address to bind the backdoor too (default: 192.168.0.76)
+                        IP Address to bind the backdoor too (default: 192.168.X.XX)
   --port PORT, -p PORT  Port for the backdoor to connect over (default: 4444)
   --random, -r          Randomizes the outputed backdoor's file name
   --out OUT, -o OUT     Specify the backdoor filename (relative file names)
