@@ -19,6 +19,7 @@ class Config:
         self.flipper: str = kwargs.get("flipper")
         self.ducky: str = kwargs.get("ducky")
         self.advanced: bool = kwargs.get("advanced")
+        self.list_payloads = kwargs.get("list_payloads")
         if kwargs.get("random"):
             self.out_file: str = f"{generate_string(8)}.ps1"
         self.TEMPLATE_DIR =self. CWD + "/templates/"
