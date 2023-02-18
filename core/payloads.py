@@ -53,7 +53,7 @@ class USBPayload:
             self.__encode_payload()
         if self.config.flipper:
             self.temp.seek(0)
-            make_unix_here(self.temp.read(), self.config.CWD + f"\\{self.config.flipper}")
+            make_unix_here(self.temp.read(), self.config.CWD + f"\\{self.config.flipper}.txt")
         self.temp.close()
         return True
 
