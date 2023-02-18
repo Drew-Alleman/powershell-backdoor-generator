@@ -34,7 +34,11 @@ POWERSHELL_SCRIPT_OBJECTS: list = [
     "response",
     "output",
     "content",
-    "readCount"
+    "readCount",
+    "createPrompt",
+    "readFromStream",
+    "getCommand",
+    "waitForConnection"
 ]
 
 class Backdoor:
