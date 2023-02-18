@@ -1,5 +1,5 @@
-
 from core.utils import generate_string
+
 
 class Config:
     def __init__(self, CWD, **kwargs):
@@ -22,7 +22,7 @@ class Config:
         self.list_payloads = kwargs.get("list_payloads")
         if kwargs.get("random"):
             self.out_file: str = f"{generate_string(8)}.ps1"
-        self.TEMPLATE_DIR =self. CWD + r"templates/"
+        self.TEMPLATE_DIR = self.CWD + r"core/payloads/templates/"
         self.BACKDOOR_TEMPLATE = self.TEMPLATE_DIR + "template.ps1"
         self.BASIC_PAYLOAD = self.TEMPLATE_DIR + "basic-payload.txt"
         self.ADVANCED_PAYLOAD = self.TEMPLATE_DIR + "advanced-payload.txt"
