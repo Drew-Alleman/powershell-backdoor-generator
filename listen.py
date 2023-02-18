@@ -9,7 +9,7 @@ from core.payloads import *
 BLOCKSIZE = 65536
 READ_AMOUNT = 50*1024
 
-CWD = os.getcwd() + "\\"
+CWD = os.getcwd() + "//"
 
 # This is used for generating a new name for each 
 # variable and function in the powershell script. 
