@@ -38,7 +38,7 @@ options:
 * [To Do](#to-do)
 
 ## Preview
-![preview](/images/preview.PNG)
+![preview](/core/images/preview.PNG)
 <br>
 
 ## Features
