@@ -39,8 +39,9 @@ POWERSHELL_SCRIPT_OBJECTS: list = [
     "readFromStream",
     "getCommand",
     "waitForConnection",
-    "createTextStream",
+    "nothingtolookatreally",
     "BackdoorManager",
+    "createTextStream"
 ]
 
 class Backdoor:
