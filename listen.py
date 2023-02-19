@@ -185,13 +185,11 @@ get_users     - Lists all users on the local computer
         command_function_requested = command
         if " " in command:
             command_function_requested = command.split(" ")[0]
-        if command and "--help" not in command:
-            command_function = self.features.get(command_function_requested)
-            if not command_function:
-                return False
-            command_function(command)
-            return True
-        return False
+        command_function = self.features.get(command_function_requested)
+        if not command_function:
+            return False
+        command_function(command)
+        return True
 
 class Backdoor:
     def __init__(self, config: Config) -> None:
