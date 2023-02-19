@@ -13,6 +13,21 @@ BLOCKSIZE = 65536
 WINDOWS_LINE_ENDING = b'\r\n'
 UNIX_LINE_ENDING = b'\n'
 
+LOGO = """
+     /| 
+    / |ejm
+   /__|______
+  |  __  __  |
+  | |  ||  | | 
+  | |__||__| |== sh!
+  |  __  __()|/      ...I'm not really here.
+  | |  ||  | |       
+  | |  ||  | |       [*] Use print_help to show all commands
+  | |__||__| |       [*] https://github.com/Drew-Alleman/powershell-backdoor-generator
+  |__________|
+
+"""
+
 def make_unix_here(content, new_path):
     """ Makes file content unix EOL 
     """
@@ -26,7 +41,7 @@ format_string = lambda string: string.decode().strip("\n") if type(string) == by
 
 generate_string = lambda string_size: ''.join(random.choice(string.ascii_letters) for i in range(string_size))
 
-def save_content_to_file(content: str, filename: str):
+def save_content_to_file(content: str, filename: str) -> bool:
     """ Saves content to a local file
     :param content: Bytes to save to file 
     :param filename: Filename to save data to
