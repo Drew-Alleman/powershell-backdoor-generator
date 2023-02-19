@@ -63,6 +63,16 @@ C:\Users\DrewQ\Desktop\powershell-backdoor-main> python .\listen.py --verbose
 ```
 A file in the current working directory will be created called backdoor.ps1
 
+### Backdoor Execution
+Tested on Windows 11, Windows 10 and Kali Linux
+```cmd
+powershell.exe -File backdoor.ps1 -ExecutionPolicy Unrestricted
+```
+```cmd
+┌──(drew㉿kali)-[/home/drew/Documents]
+└─PS> ./backdoor.ps1
+```
+
 # Bad USB/ USB Rubber Ducky attacks
 When using any of these attacks you will be opening up a HTTP server hosting the backdoor. Once the backdoor is retrieved the HTTP server will be shutdown.
 
@@ -91,16 +101,6 @@ it will download and execute backdoor.ps1
 
 ## Thanks
 To encode payload.txt into inject.bin for USB Rubber Ducky Attacks I use encoder.jar created by ![midnitesnake](https://github.com/midnitesnake).
-
-## Backdoor Execution
-Tested on Windows 11, Windows 10 and Kali Linux
-```cmd
-powershell.exe -File backdoor.ps1 -ExecutionPolicy Unrestricted
-```
-```cmd
-┌──(drew㉿kali)-[/home/drew/Documents]
-└─PS> ./backdoor.ps1
-```
 
 ## To Do 
 * Add Standard Backdoor
