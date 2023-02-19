@@ -61,7 +61,6 @@ class Client:
             "get_bios":self.get_bios,
             "get_antivirus":self.get_antivirus,
             "get_active": self.get_active,
-            "install_tools": self.install_tools,
             "install_choco": self.install_choco,
             "play_wav": self.play_wav,
         }
