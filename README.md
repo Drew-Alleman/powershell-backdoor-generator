@@ -45,6 +45,7 @@ options:
 * Hak5 Rubber Ducky payload
 * Flipper Zero payload
 * Download Files from remote system
+* Play wav files from a URL
 * Fetch target computers public IP address
 * List local users
 * Find Intresting Files
