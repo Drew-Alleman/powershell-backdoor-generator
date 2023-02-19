@@ -36,6 +36,7 @@ options:
 * [USB Rubber Ducky Backdoor](#usb-rubber-ducky-backdoor)
 * [Thanks](#thanks)
 * [To Do](#to-do)
+* [Output of 5 Obfuscations](Output-of-5-obfuscations/Runs)
 
 ## Preview
 ![preview](/core/images/preview.PNG)
@@ -105,9 +106,10 @@ it will download and execute backdoor.ps1
 To encode payload.txt into inject.bin for USB Rubber Ducky Attacks I use encoder.jar created by ![midnitesnake](https://github.com/midnitesnake).
 
 ## To Do 
-* Add Standard Backdoor
+* Pull Recent RDP connections
+* Change Wallpaper from URL
 * Find Writeable Directories
-* Get Windows Update Status
+* Clear Logs
 
 ## Output of 5 obfuscations/Runs 
 ```
