@@ -131,15 +131,20 @@ get_users        - Lists all users on the local computer
     def get_tools(self, command = None):
         """  Checks to see what tools are installed on the system
         """
-        tools = [    "nmap -h",    "nc -h",    "wireshark -v",    "python3 -V",    "python -V",    "perl -V",    "ruby -h",    "hashcat -h",    "john -h",    "airmon-ng -h",    "wifite -h",    "sqlmap -h",    "ssh -V",    "gdb -h",    "radare2 -h",    "dig -h",    "whois -h",    "gcc -v",    "g++ -v",    "make -v",    "zip -h",    "unzip -h",    "curl -V",    "wget -V",    "tcpdump -h",    "nikto -h",    "dirb -h",    "hydra -h",    "nbtscan -h",    "netcat -h",    "recon-ng -h",    "sublist3r -h",    "amass -h",    "masscan -h",    "sqlninja -h",    "metasploit --version",    "aircrack-ng -h",   "ettercap -h",    "dsniff -h",    "driftnet -h",    "tshark --version"]
+        tools = [    "nmap -V",    "nc -h",    "wireshark -v",    "python3 -V",    "python -V",    "perl -V",    "ruby -h",    "hashcat -h",    "john -h",    "airmon-ng -h",    "wifite -h",    "sqlmap -h",    "ssh -V",    "gdb -h",    "radare2 -h",    "dig -h",    "whois -h",    "gcc -v",    "g++ -v",    "make -v",    "zip -h",    "unzip -h",    "tcpdump -h",    "nikto -h",    "dirb -h",    "hydra -h",    "nbtscan -h",    "netcat -h",    "recon-ng -h",    "sublist3r -h",    "amass -h",    "masscan -h",    "sqlninja -h",    "metasploit --version",    "aircrack-ng -h",   "ettercap -h",    "dsniff -h",    "driftnet -h",    "tshark --version"]
         print("[*] Listing Installed tools below")
         for tool in tools:
+            content = None
             self.connection.sendto(tool.encode(), self.config.ip_tuple)
-            content = format_string(self.recvall())
-            if "CommandNotFoundException" not in content:
-                if " " in tool:
-                    tool = tool.split(" ")[0]
-                print(f"{tool}")
+            while not isinstance(content, str):
+                time.sleep(.5)
+                content = format_string(self.recvall())
+            if " is not recognized as the name of a cmdlet, " in content:
+                continue
+            if " " in tool:
+                tool = tool.split(" ")[0]
+            print(tool)
+        self.__send_fake_request()
 
     def get_public_ip(self, command = None) -> None:
         """ Fetches the users public IP Address
