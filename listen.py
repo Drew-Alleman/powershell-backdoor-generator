@@ -131,7 +131,7 @@ get_users        - Lists all users on the local computer
     def get_tools(self, command = None):
         """  Checks to see what tools are installed on the system
         """
-        tools = [    "nmap -V",    "nc -h",    "wireshark -v",    "python3 -V",    "python -V",    "perl -V",    "ruby -h",    "hashcat -h",    "john -h",    "airmon-ng -h",    "wifite -h",    "sqlmap -h",    "ssh -V",    "gdb -h",    "radare2 -h",    "dig -h",    "whois -h",    "gcc -v",    "g++ -v",    "make -v",    "zip -h",    "unzip -h",    "tcpdump -h",    "nikto -h",    "dirb -h",    "hydra -h",    "nbtscan -h",    "netcat -h",    "recon-ng -h",    "sublist3r -h",    "amass -h",    "masscan -h",    "sqlninja -h",    "metasploit --version",    "aircrack-ng -h",   "ettercap -h",    "dsniff -h",    "driftnet -h",    "tshark --version"]
+        tools = [    "nmap -V",    "nc -h",    "wireshark -v",    "python3 -V", "git -V"    "python -V",    "perl -V",    "ruby -h",    "hashcat -h",    "john -h",    "airmon-ng -h",    "wifite -h",    "sqlmap -h",    "ssh -V",    "gdb -h",    "radare2 -h",    "dig -h",    "whois -h",    "gcc -v",    "g++ -v",    "make -v",    "zip -h",    "unzip -h",    "tcpdump -h",    "nikto -h",    "dirb -h",    "hydra -h",    "nbtscan -h",    "netcat -h",    "recon-ng -h",    "sublist3r -h",    "amass -h",    "masscan -h",    "sqlninja -h",    "metasploit --version",    "aircrack-ng -h",   "ettercap -h",    "dsniff -h",    "driftnet -h",    "tshark --version"]
         print("[*] Listing Installed tools below")
         for tool in tools:
             content = None
