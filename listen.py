@@ -136,7 +136,6 @@ get_users        - Lists all users on the local computer
         for tool in tools:
             self.connection.sendto(tool.encode(), self.config.ip_tuple)
             content = format_string(self.recvall())
-            print(content)
             if "CommandNotFoundException" not in content:
                 if " " in tool:
                     tool = tool.split(" ")[0]
