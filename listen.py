@@ -58,7 +58,8 @@ class Client:
             "get_users": self.get_users,
             "get_os":self.get_os,
             "get_bios":self.get_bios,
-            "get_antivirus":self.get_antivirus
+            "get_antivirus":self.get_antivirus,
+            "get_active": self.get_active
         }
 
     def run_powershell_command(self, command) -> None:
@@ -129,9 +130,10 @@ get_users     - Lists all users on the local computer
         for tool in tools:
             self.connection.sendto(tool.encode(), self.config.ip_tuple)
             content = format_string(self.recvall())
-            if " " in tool:
-                tool = tool.split(" ")[0]
+            print(content)
             if content:
+                if " " in tool:
+                    tool = tool.split(" ")[0]
                 print(f"{tool}")
 
     def get_public_ip(self, command = None) -> None:
