@@ -48,10 +48,11 @@ options:
 * Fetch target computers public IP address
 * List local users
 * Find Intresting Files
-* Get OS Information
-* Get BIOS Information
+* Enumerate OS Information
+* Find BIOS Information
 * Get Anti-Virus Status
 * Get Active TCP Clients
+* Install Choco (https://chocolatey.org/)
 * Checks for common pentesting software installed
 
 ## Standard backdoor
