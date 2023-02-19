@@ -119,6 +119,7 @@ get_tools     - Checks to see what tools are installed on the system
 get_file      - Downloads a remote file and saves it to your computer ... Syntax: get_file <REMOTE_FILE> <LOCAL_FILE>
 get_users     - Lists all users on the local computer
     """)
+        self.__send_fake_request()
 
     def get_tools(self, command = None):
         """  Checks to see what tools are installed on the system
