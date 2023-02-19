@@ -113,10 +113,11 @@ To encode payload.txt into inject.bin for USB Rubber Ducky Attacks I use encoder
 * Disable Defender
 
 ## Output of 5 Obfuscations
+Below is the sha1 hash of backdoor.ps1 after 5 builds.
 ```
-sha1:c7a5fa3e56640ce48dcc3e8d972e444d9cdd2306
-sha1:b32dab7b26cdf6b9548baea6f3cfe5b8f326ceda
-sha1:e49ab36a7ad6b9fc195b4130164a508432f347db
-sha1:ba40fa061a93cf2ac5b6f2480f6aab4979bd211b
-sha1:f2e43320403fb11573178915b7e1f258e7c1b3f0
+1e158f02484e5c58d74c1507a1773392ffacfca2
+6d18230a419195d0f77519abc0238768956cdd58
+558a8cbac40239c9e6660a45cc8fc5d02b5057d7
+caf4d0c8424eceb960d5f5c526e83ecd485c4ac9
+947b57824917842d79f9cbcac8a795aa7c2f8a49
 ```
