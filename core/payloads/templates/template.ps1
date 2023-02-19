@@ -64,10 +64,6 @@
     [string] getCommand($command) {
         Write-Host  $command;
         try { 
-            if ($command -match "function") {
-                Invoke-Expression $command 
-                return "";
-                }  else {
                 $output = Invoke-Expression $command | Out-String
             }
         } catch {
