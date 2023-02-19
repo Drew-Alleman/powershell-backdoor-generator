@@ -42,7 +42,10 @@ POWERSHELL_SCRIPT_OBJECTS: list = [
     "nothingtolookatreally",
     "BackdoorManager",
     "createTextStream",
-    "command"
+    "command",
+    "bytes",
+    "powershellException",
+    "msg",
 ]
 
 class Client:
