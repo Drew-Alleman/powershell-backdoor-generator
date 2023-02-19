@@ -47,7 +47,6 @@ options:
 * Download Files from remote system
 * Fetch target computers public IP address
 * List local users
-* Disable Windows AV (Requires Admin Priv)
 * Find Intresting Files
 * Get OS Information
 * Get BIOS Information
