@@ -36,7 +36,7 @@ options:
 * [USB Rubber Ducky Backdoor](#usb-rubber-ducky-backdoor)
 * [Thanks](#thanks)
 * [To Do](#to-do)
-* [Output of 5 Obfuscations](#Output-of-5-obfuscations/Runs)
+* [Output of 5 Obfuscations](#Output-of-5-Obfuscations)
 
 ## Preview
 ![preview](/core/images/preview.PNG)
@@ -111,7 +111,7 @@ To encode payload.txt into inject.bin for USB Rubber Ducky Attacks I use encoder
 * Find Writeable Directories
 * Clear Logs
 
-## Output of 5 obfuscations/Runs 
+## Output of 5 Obfuscations
 ```
 sha1:c7a5fa3e56640ce48dcc3e8d972e444d9cdd2306
 sha1:b32dab7b26cdf6b9548baea6f3cfe5b8f326ceda
