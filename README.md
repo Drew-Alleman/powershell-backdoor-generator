@@ -110,6 +110,7 @@ To encode payload.txt into inject.bin for USB Rubber Ducky Attacks I use encoder
 * Change Wallpaper from URL
 * Find Writeable Directories
 * Clear Logs
+* Disable Defender
 
 ## Output of 5 Obfuscations
 ```
