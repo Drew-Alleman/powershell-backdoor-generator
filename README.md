@@ -50,12 +50,12 @@ options:
 * Fetch target computers public IP address
 * List local users
 * Find Intresting Files
-* Enumerate OS Information
-* Find BIOS Information
-* Get Anti-Virus Status
+* Gather information about the target system's operating system
+* Retrieve BIOS information from the target syste
+* Check if an anti-virus software is installed and its current status
 * Get Active TCP Clients
-* Install Choco (https://chocolatey.org/)
-* Checks for common pentesting software installed
+* Install Chocolatey, a popular package manager for Windows (https://chocolatey.org/)
+* Check if common pentesting software is installed on the target system.
 
 ## Standard backdoor
 ``` bash
