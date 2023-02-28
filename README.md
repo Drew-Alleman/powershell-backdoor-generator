@@ -36,7 +36,7 @@ options:
 * [USB Rubber Ducky Backdoor](#usb-rubber-ducky-backdoor)
 * [Thanks](#thanks)
 * [To Do](#to-do)
-* [Output of 5 Obfuscations](#Output-of-5-Obfuscations)
+* [Output of 5 Obfuscations](#output-of-5-obfuscations)
 
 ## Preview
 ![preview](/core/images/preview.PNG)
