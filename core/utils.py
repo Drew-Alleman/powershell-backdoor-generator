@@ -58,9 +58,14 @@ def get_output(command: list) -> str:
     :param command: commad to run
     :return: stdout 
     """
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE,  stderr=subprocess.PIPE)
-    time.sleep(1.5)
+    print("[*] Encoding payload.txt -> inject.bin")
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE,  stderr=subprocess.PIPE, shell=True)
+    proc.wait()
     stdout, stderr = proc.communicate()
+    if not stderr:
+        print("[*] Encoded payload.txt -> inject.bin")
+    else:
+        print(f"[*] Ran into an error: {stderr} when encoding 'payload.txt' ")    
     return stdout
 
 def obfuscate(original: str, old: str, size: int = None) -> str:
