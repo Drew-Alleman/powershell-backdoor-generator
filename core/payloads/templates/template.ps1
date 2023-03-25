@@ -65,8 +65,8 @@ class BackdoorManager {
         }
         catch {
             $powershellException = $_.Exception
-            $msg = $e.Message
-            $output = "`n$e`n"
+            $msg = $_.Message
+            $output = "`n$_`n"
         }
         return $output
     }
