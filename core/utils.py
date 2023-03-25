@@ -53,19 +53,14 @@ def save_content_to_file(content: str, filename: str) -> bool:
         f.write(content)
     return True
 
+
 def get_output(command: list) -> str:
     """ returns the stdout of a cmd command
     :param command: commad to run
     :return: stdout 
     """
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE,  stderr=subprocess.PIPE, shell=True)
-    proc.wait()
-    stdout, stderr = proc.communicate()
-    if not stderr:
-        print("[*] Encoded payload.txt -> inject.bin")
-    else:
-        print(f"[*] Ran into an error: {stderr} when encoding 'payload.txt' ")    
-    return stdout
+    os.system(" ".join(command)) ##  Tried subprocess but the output file always had 0 bytes (even with shell=True)
+    return "DuckyScript Complete" # Yeah, like I said this was subprocess :)
 
 def obfuscate(original: str, old: str, size: int = None) -> str:
     """ Obfuscate's a specific variable from text to a random string
