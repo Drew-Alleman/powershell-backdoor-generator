@@ -60,7 +60,7 @@ def get_output(command: list) -> str:
     :return: stdout 
     """
     os.system(" ".join(command)) ##  Tried subprocess but the output file always had 0 bytes (even with shell=True)
-    return "DuckyScript Complete" # Yeah, like I said this was subprocess :)
+    return b"DuckyScript Complete" # Yeah, like I said this was subprocess :)
 
 def obfuscate(original: str, old: str, size: int = None) -> str:
     """ Obfuscate's a specific variable from text to a random string
