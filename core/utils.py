@@ -58,7 +58,6 @@ def get_output(command: list) -> str:
     :param command: commad to run
     :return: stdout 
     """
-    print("[*] Encoding payload.txt -> inject.bin")
     proc = subprocess.Popen(command, stdout=subprocess.PIPE,  stderr=subprocess.PIPE, shell=True)
     proc.wait()
     stdout, stderr = proc.communicate()
