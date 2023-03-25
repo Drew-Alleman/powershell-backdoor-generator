@@ -75,7 +75,7 @@ class USBPayload:
             make_unix_here(
                 self.temp.read(), self.config.CWD + f"\\{self.config.flipper}.txt"
             )
-        self.__remove_temp_file()
+        self.__remove_and_close_temp()
         return True
 
     def stop(self):
