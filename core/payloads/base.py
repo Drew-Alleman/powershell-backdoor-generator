@@ -16,7 +16,6 @@ class USBPayload:
     def __remove_and_close_temp(self) -> None:
         """Removes and closes the temporary file payload.txt"""
         self.temp.close()
-        self.__remove_temp_file()
 
     def __remove_temp_file(self) -> None:
         """Removes the temporary payload.txt file"""
