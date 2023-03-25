@@ -1,10 +1,10 @@
 import re
-import os
 import time
 import socket
 import random
 import string
 import hashlib
+import subprocess
 import socketserver
 from threading import Thread
 from http.server import SimpleHTTPRequestHandler
@@ -55,12 +55,20 @@ def save_content_to_file(content: str, filename: str) -> bool:
 
 
 def get_output(command: list) -> str:
-    """ returns the stdout of a cmd command
-    :param command: commad to run
-    :return: stdout 
+    """Returns the stdout of a cmd command.
+
+    :param command: Command to run.
+    :return: stdout.
     """
-    os.system(" ".join(command)) ##  Tried subprocess but the output file always had 0 bytes (even with shell=True)
-    return b"DuckyScript Complete" # Yeah, like I said this was subprocess :)
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    proc.wait()
+    time.sleep(2.5)
+    stdout, stderr = proc.communicate()
+    if not stderr:
+        print("[*] Encoded payload.txt -> inject.bin")
+    else:
+        print(f"[*] Ran into an error: {stderr} when encoding 'payload.txt' ")    
+    return stdout
 
 def obfuscate(original: str, old: str, size: int = None) -> str:
     """ Obfuscate's a specific variable from text to a random string
