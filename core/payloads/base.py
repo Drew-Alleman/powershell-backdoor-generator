@@ -16,6 +16,7 @@ class USBPayload:
     def __remove_and_close_temp(self) -> None:
         """Removes and closes the temporary file payload.txt"""
         self.temp.close()
+        self.__remove_temp_file()
 
     def __remove_temp_file(self) -> None:
         """Removes the temporary payload.txt file"""
@@ -49,6 +50,7 @@ class USBPayload:
         :return: True if the file was made
         """
         try:
+            self.temp.close()
             out = get_output(
                 [
                     "java",
@@ -73,7 +75,7 @@ class USBPayload:
             make_unix_here(
                 self.temp.read(), self.config.CWD + f"\\{self.config.flipper}.txt"
             )
-        self.__remove_and_close_temp()
+        self.__remove_temp_file()
         return True
 
     def stop(self):
