@@ -1,4 +1,6 @@
 # powershell-backdoor
+[![Guide](https://img.youtube.com/vi/C6_6-7b6P3E/0.jpg)](https://www.youtube.com/watch?v=C6_6-7b6P3E)
+<br>
 Reverse backdoor tool written in PowerShell and obfuscated with Python, providing a new signature after every build to avoid detection. The tool has the capability to create payloads for popular hacking devices such as Flipper Zero and Hak5 USB Rubber Ducky. Use this tool to test your system's defenses against advanced attack techniques.
 ```
 usage: listen.py [-h] [--ip-address IP_ADDRESS] [--port PORT] [--random] [--out OUT] [--verbose] [--delay DELAY] [--flipper FLIPPER] [--ducky]
