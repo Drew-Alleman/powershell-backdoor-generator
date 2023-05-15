@@ -69,7 +69,7 @@ C:\Users\DrewQ\Desktop\powershell-backdoor-main> python .\listen.py --verbose
 A file in the current working directory will be created called backdoor.ps1
 
 ### Backdoor Execution
-Tested on Windows 11, Windows 10 and Kali Linux
+Tested on Windows 11, Windows 10 and Kali Linux. To run this as a hidden window and with persistence access follow the guide ![here](https://github.com/Drew-Alleman/powershell-backdoor-generator/issues/2#issuecomment-1546996105)
 ```cmd
 powershell.exe -File backdoor.ps1 -ExecutionPolicy Unrestricted
 ```
