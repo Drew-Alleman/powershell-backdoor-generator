@@ -1,3 +1,26 @@
+```
+/******************************************************************************
+ * DISCLAIMER: 
+ * 
+ * This program is intended for educational purposes only. By using this program,
+ * you agree that you understand the potential risks associated with its use.
+ * 
+ * - This program should not be used on any system or network without proper 
+ *   authorization. Unauthorized use is strictly prohibited.
+ * 
+ * - The creator of this program assumes no liability for any damages, legal 
+ *   consequences, or loss of data caused by the use of this program.
+ * 
+ * - It is your responsibility to ensure that you comply with all applicable 
+ *   laws and regulations while using this program.
+ * 
+ * Please use this program responsibly and ethically, and respect the privacy 
+ * and security of others.
+ *****************************************************************************/
+
+
+```
+
 # powershell-backdoor
 [![Guide](https://img.youtube.com/vi/C6_6-7b6P3E/0.jpg)](https://www.youtube.com/watch?v=C6_6-7b6P3E)
 <br>
